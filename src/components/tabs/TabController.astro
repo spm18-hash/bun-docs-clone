@@ -32,7 +32,7 @@ const { triggerId, panelId, initialTab = 0 } = Astro.props;
 
         private handleSync(e: Event) {
             const newIndex = (e as CustomEvent).detail as number;
-            console.log("event recieved");
+
             if (
                 typeof newIndex === "number" &&
                 newIndex !== this.currentIndex

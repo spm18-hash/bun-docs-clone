@@ -1,6 +1,6 @@
 ---
 import Icons from "../Icons.astro";
-const { sidebar, id } = Astro.locals.starlightRoute;
+const { sidebar } = Astro.locals.starlightRoute;
 
 const makeId = (label: string) =>
     `__tab-${label.toLowerCase().replaceAll(/\s+/g, "-")}`;
@@ -131,7 +131,7 @@ const makeId = (label: string) =>
 
         private handleSync(e: Event) {
             const newIndex = (e as CustomEvent).detail as number;
-            console.log("event received select");
+
             if (
                 typeof newIndex === "number" &&
                 newIndex !== this.currentIndex
