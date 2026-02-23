@@ -1,0 +1,11 @@
+---
+const { hero } = Astro.locals.starlightRoute.entry.data;
+---
+
+<h1>Hero</h1>
+
+<style>
+    :global([data-has-hero] .sl-container) {
+        max-width: 100%;
+    }
+</style>

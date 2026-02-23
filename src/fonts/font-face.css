@@ -1,0 +1,15 @@
+@font-face {
+    font-family: "Inter";
+    src: url("./InterVariable.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 400 600;
+    font-display: optional;
+}
+
+@font-face {
+    font-family: "JetBrains Mono";
+    src: url("./JetBrainsMonoVariable.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 400 600;
+    font-display: optional;
+}

@@ -1,0 +1,43 @@
+---
+import logo from "@/assets/logo-with-wordmark-light.svg?raw";
+
+const main = `${Astro.site}docs`;
+---
+
+<span class="site-title sl-flex">
+    <a class="astro-logo" href={main} set:html={logo} aria-label="Astro" />
+</span>
+
+<style>
+    .site-title {
+        gap: 1rem;
+    }
+
+    .site-title a {
+        display: flex;
+    }
+
+    .astro-logo {
+        color: var(--sl-color-white);
+    }
+
+    .site-title a:focus-visible {
+        outline: 0;
+    }
+    .site-title a:focus-visible > :global(*) {
+        outline: auto;
+        outline-offset: 0.2rem;
+        border-radius: 1px;
+    }
+    .site-title :global(svg) {
+        --display-height: 1.5rem;
+        width: auto;
+        height: var(--display-height);
+        margin-block: calc((var(--sl-nav-height)-var(--display-height)) / 2);
+        transition: transform 0.18s cubic-bezier(0.75, 0.82, 0.165, 1);
+    }
+    .site-title a:hover :global(svg) {
+        --hover-offset: 0.15rem;
+        transform: translateY(calc(var(--hover-offset) * -1));
+    }
+</style>

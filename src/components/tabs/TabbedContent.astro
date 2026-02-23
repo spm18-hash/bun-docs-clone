@@ -1,0 +1,215 @@
+---
+import TabListItem from "./TabListItem.astro";
+
+export interface Props {
+    /**
+     * List of content for the tab list.
+     * To use more complex mark-up, pass <TabListItem>s inside a <Fragment slot="tab-list">.
+     */
+    tabs?: { label: string; id: string; initial?: boolean }[];
+    /** Enable default styles for the tab list and panels. */
+    styled?: boolean;
+    /** Additional class names to apply to .tab-list and .panels. */
+    class?: string;
+}
+
+const { tabs, styled } = Astro.props;
+---
+
+<tabbed-content>
+    <ul
+        class:list={[
+            "tab-list",
+            Astro.props.class,
+            { "tab-list--styled": styled },
+        ]}
+    >
+        <slot name="tab-list">
+            {
+                tabs?.map((tab) => (
+                    <TabListItem id={tab.id} initial={tab.initial}>
+                        {tab.label}
+                    </TabListItem>
+                ))
+            }
+        </slot>
+    </ul>
+
+    <div
+        class:list={["panels", Astro.props.class, { "panels--styled": styled }]}
+    >
+        <slot />
+    </div>
+</tabbed-content>
+
+<style>
+    .tab-list {
+        list-style: none;
+        padding: 0;
+    }
+    .tab-list--styled {
+        display: flex;
+        margin-top: -1px;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+    @media (min-width: 72em) {
+        .tab-list--styled {
+            justify-content: space-between;
+            margin-top: 0;
+            padding: 1px;
+        }
+    }
+
+    .panels--styled {
+        padding-left: 1px;
+        padding-right: 1px;
+    }
+
+    /* Essential functional CSS for the component logic */
+    tabbed-content [hidden] {
+        display: none !important;
+    }
+</style>
+
+<script>
+    class Tabs extends HTMLElement {
+        // Generate ID safely
+        id = Math.floor(Math.random() * 10e10).toString(32);
+        private count = 0;
+        private TabStore: Set<HTMLElement>[] = [];
+        private PanelStore: Set<HTMLElement>[] = [];
+        private initialized = false;
+
+        constructor() {
+            super();
+            // Constructor is for state initialization ONLY.
+            // Do not touch the DOM here.
+        }
+
+        connectedCallback() {
+            // Prevent running logic twice if the element is moved in the DOM
+            if (this.initialized) return;
+
+            // Get relevant elements and collections
+            // Note: We use arrow functions or .bind(this) to preserve scope
+            const panels = this.querySelectorAll<HTMLElement>("#panels > [id]");
+            console.log(panels);
+            const tablist = this.querySelector(".tab-list");
+
+            if (!tablist) return; // Safety check
+
+            const tabs = tablist.querySelectorAll<HTMLElement>("a");
+
+            // Add the tablist role
+            tablist.setAttribute("role", "tablist");
+
+            let initialTab = 0;
+
+            // Setup Tabs
+            tabs.forEach((tab, i) => {
+                tab.setAttribute("role", "tab");
+                tab.setAttribute("id", this.id + "tab" + this.count++);
+                tab.setAttribute("tabindex", "-1");
+
+                tab.parentElement?.setAttribute("role", "presentation");
+
+                if (!this.TabStore[i]) this.TabStore.push(new Set());
+                this.TabStore[i].add(tab);
+
+                if (tab.dataset.initial && tab.dataset.initial !== "false") {
+                    initialTab = i;
+                }
+
+                // Handle Clicking
+                const onClick = (e: MouseEvent) => {
+                    e.preventDefault();
+                    const currentTab = tablist.querySelector("[aria-selected]");
+                    if (e.currentTarget !== currentTab) {
+                        this.switchTab(e.currentTarget as HTMLElement, i);
+                    }
+                };
+                tab.addEventListener("click", onClick);
+                tab.addEventListener("auxclick", onClick);
+
+                // Handle Keyboard
+                tab.addEventListener("keydown", (e: KeyboardEvent) => {
+                    const index = Array.from(tabs).indexOf(
+                        e.currentTarget as HTMLElement,
+                    );
+
+                    let dir: number | null = null;
+
+                    if (e.key === "ArrowLeft") dir = index - 1;
+                    else if (e.key === "ArrowRight") dir = index + 1;
+                    else if (e.key === "Home") dir = 0;
+                    else if (e.key === "End") dir = tabs.length - 1;
+
+                    if (dir !== null) {
+                        e.preventDefault();
+                        if (tabs[dir]) this.switchTab(tabs[dir], dir);
+                    }
+                });
+            });
+
+            // Setup Panels
+            panels.forEach((panel, i) => {
+                panel.setAttribute("role", "tabpanel");
+                panel.setAttribute("tabindex", "0"); // 0 allows panel to be focused for scrolling
+                if (tabs[i]) panel.setAttribute("aria-labelledby", tabs[i].id);
+                panel.hidden = true;
+
+                if (!this.PanelStore[i]) this.PanelStore.push(new Set());
+                this.PanelStore[i].add(panel);
+            });
+
+            // Activate Initial
+            if (tabs[initialTab]) {
+                tabs[initialTab].removeAttribute("tabindex");
+                tabs[initialTab].setAttribute("aria-selected", "true");
+                if (this.PanelStore[initialTab]) {
+                    this.PanelStore[initialTab].forEach(
+                        (p) => (p.hidden = false),
+                    );
+                }
+            }
+
+            this.initialized = true;
+        }
+
+        switchTab(newTab: HTMLElement, index: number) {
+            // Deactivate all
+            this.TabStore.forEach((store) =>
+                store.forEach((oldTab) => {
+                    oldTab.removeAttribute("aria-selected");
+                    oldTab.setAttribute("tabindex", "-1");
+                }),
+            );
+
+            // Activate new tab
+            this.TabStore[index]?.forEach((activeTab) => {
+                activeTab.removeAttribute("tabindex");
+                activeTab.setAttribute("aria-selected", "true");
+            });
+
+            // Hide all panels
+            this.PanelStore.forEach((store) =>
+                store.forEach((oldPanel) => {
+                    oldPanel.hidden = true;
+                }),
+            );
+
+            // Show new panel
+            this.PanelStore[index]?.forEach((newPanel) => {
+                newPanel.hidden = false;
+            });
+
+            newTab.focus();
+        }
+    }
+
+    // Safe Definition Check
+    if (!customElements.get("tabbed-content")) {
+        customElements.define("tabbed-content", Tabs);
+    }
+</script>

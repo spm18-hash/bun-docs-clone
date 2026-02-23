@@ -1,0 +1,49 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+export interface Props {
+    id: string;
+    initial?: boolean;
+    class?: string;
+}
+
+const { id, initial } = Astro.props;
+const linkAttributes: HTMLAttributes<"a"> = initial
+    ? { "data-initial": "true", "aria-selected": "true" }
+    : {};
+---
+
+<li class:list={Astro.props.class}>
+    <a href={"#" + id} class="tab-link" {...linkAttributes}><slot /></a>
+    <div class="tab-item-border"></div>
+</li>
+
+<style>
+    li {
+        position: relative;
+    }
+    a {
+        font-size: 0.85em;
+        line-height: var(--sl-line-height-headings);
+    }
+    .tab-item-border {
+        position: absolute;
+        height: 1px;
+        background-color: transparent;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+    }
+
+    .tab-item :global(a:hover + .tab-item-border) {
+        background-color: hsl(from var(--sl-color-gray-4) h s l / 0.6);
+    }
+
+    .tab-item :global(a[aria-selected="true"]) {
+        color: var(--tab-switcher-text-color--active);
+    }
+
+    .tab-item :global(a[aria-selected="true"]) + .tab-item-border {
+        background-color: var(--tab-switcher-border-color);
+    }
+</style>

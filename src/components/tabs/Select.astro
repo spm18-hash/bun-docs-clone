@@ -1,0 +1,250 @@
+---
+import Icons from "../Icons.astro";
+const { sidebar, id } = Astro.locals.starlightRoute;
+
+const makeId = (label: string) =>
+    `__tab-${label.toLowerCase().replaceAll(/\s+/g, "-")}`;
+---
+
+<select-nav>
+    <div class="select-wrapper">
+        <button
+            type="button"
+            aria-haspopup="listbox"
+            aria-expanded="false"
+            class="select-trigger"
+        >
+            <span class="selected-value"></span>
+            <Icons name="chevron-down" />
+        </button>
+
+        <ul role="listbox" class="select-dropdown" hidden>
+            {
+                sidebar.map(({ label }, index) => (
+                    <li data-value={label}>
+                        <a href={`#${makeId(label)}`}>{label}</a>
+                        <Icons name="check" />
+                    </li>
+                ))
+            }
+        </ul>
+    </div>
+</select-nav>
+
+<style>
+    select-nav {
+        display: block;
+        width: 100%;
+        position: relative;
+        font-size: 0.9em;
+        font-weight: 500;
+
+        @media (min-width: 64em) {
+            display: none;
+        }
+    }
+
+    .select-trigger {
+        display: inline-flex;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        padding: 6px 14px 6px 16px;
+        font-size: 1rem;
+        border: 1px solid var(--sl-color-gray-6);
+        border-radius: 1rem;
+        background-color: var(--sl-color-bg);
+
+        &[aria-expanded="true"] {
+            background-color: hsl(from var(--sl-color-gray-6) h s l / 0.3);
+            & svg {
+                transform: rotate(180deg);
+            }
+        }
+    }
+
+    .select-dropdown {
+        position: absolute;
+        top: 110%;
+        left: 0;
+        right: 0;
+        background-color: var(--sl-color-bg);
+        border: 1px solid var(--sl-color-gray-6);
+        border-radius: 16px;
+        list-style: none;
+        overflow: hidden;
+        margin: 0;
+        padding: 6px;
+        z-index: 1000;
+
+        & li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            cursor: pointer;
+
+            &:hover {
+                color: var(--sl-color-red);
+            }
+
+            & a {
+                display: flex;
+                width: 100%;
+                color: inherit;
+                text-decoration: none;
+
+                &[aria-selected="true"] {
+                    color: var(--sl-color-red);
+                    & + svg {
+                        display: flex;
+                        color: var(--sl-color-red);
+                    }
+                }
+            }
+
+            & svg {
+                display: none;
+            }
+        }
+    }
+</style>
+
+<script>
+    class CustomSelect extends HTMLElement {
+        private triggers: HTMLElement[] = [];
+        private dropdownTrigger: HTMLButtonElement | null = null;
+        private dropdown: HTMLUListElement | null = null;
+        private selectedValue: HTMLSpanElement | null = null;
+        private initialized: boolean = false;
+        private isOpen: boolean = false;
+        private currentIndex = 0;
+
+        private handleSyncBound: (e: Event) => void;
+
+        constructor() {
+            super();
+
+            this.toggleDropdown = this.toggleDropdown.bind(this);
+            this.handleSyncBound = this.handleSync.bind(this);
+        }
+
+        private handleSync(e: Event) {
+            const newIndex = (e as CustomEvent).detail as number;
+            console.log("event received select");
+            if (
+                typeof newIndex === "number" &&
+                newIndex !== this.currentIndex
+            ) {
+                this.handleOptionClick(newIndex, false);
+            }
+        }
+
+        connectedCallback() {
+            if (this.initialized) return;
+
+            this.dropdownTrigger =
+                this.querySelector<HTMLButtonElement>(".select-trigger");
+            this.dropdown =
+                this.querySelector<HTMLUListElement>(".select-dropdown");
+            this.selectedValue =
+                this.querySelector<HTMLSpanElement>(".selected-value");
+
+            if (!this.dropdown) return;
+
+            this.triggers = Array.from(this.dropdown.querySelectorAll("a"));
+
+            this.triggers.forEach((select, index) => {
+                const href = select.getAttribute("href");
+                if (href && href.startsWith("#")) {
+                    select.setAttribute("aria-controls", href.substring(1));
+                }
+
+                select.setAttribute("aria-selected", "false");
+
+                select.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    this.handleOptionClick(index, true);
+                });
+            });
+
+            window.addEventListener("sync-tab-state", this.handleSyncBound);
+
+            let initialIndex = 0;
+            const savedIndex = sessionStorage.getItem("starlight-active-tab");
+            if (savedIndex !== null) {
+                initialIndex = parseInt(savedIndex, 10);
+            }
+
+            if (this.triggers[initialIndex] && this.selectedValue) {
+                this.handleOptionClick(initialIndex, false);
+            }
+
+            this.initialized = true;
+
+            if (this.dropdownTrigger) {
+                this.dropdownTrigger.addEventListener(
+                    "click",
+                    this.toggleDropdown,
+                );
+            }
+        }
+
+        disconnectedCallback() {
+            window.removeEventListener("sync-tab-state", this.handleSyncBound);
+            if (this.dropdownTrigger) {
+                this.dropdownTrigger.removeEventListener(
+                    "click",
+                    this.toggleDropdown,
+                );
+            }
+        }
+
+        private handleOptionClick(index: number, emitEvent: boolean = true) {
+            if (this.initialized && this.currentIndex === index) return;
+
+            this.currentIndex = index;
+
+            this.triggers.forEach((trigger) => {
+                trigger.setAttribute("aria-selected", "false");
+            });
+
+            const selected = this.triggers[this.currentIndex];
+
+            if (this.selectedValue && selected) {
+                this.selectedValue.textContent =
+                    selected.textContent?.trim() || "";
+            }
+
+            if (selected) {
+                selected.setAttribute("aria-selected", "true");
+            }
+
+            if (this.isOpen) {
+                this.toggleDropdown();
+            }
+
+            if (emitEvent) {
+                window.dispatchEvent(
+                    new CustomEvent("sync-tab-state", { detail: index }),
+                );
+            }
+        }
+
+        private toggleDropdown() {
+            this.isOpen = !this.isOpen;
+            this.dropdownTrigger?.setAttribute(
+                "aria-expanded",
+                this.isOpen.toString(),
+            );
+
+            if (this.isOpen) {
+                this.dropdown?.removeAttribute("hidden");
+            } else {
+                this.dropdown?.setAttribute("hidden", "");
+            }
+        }
+    }
+
+    customElements.define("select-nav", CustomSelect);
+</script>

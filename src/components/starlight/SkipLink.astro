@@ -1,0 +1,27 @@
+---
+const PAGE_TITLE_ID = "_top";
+---
+
+<a href={`#${PAGE_TITLE_ID}`}>{Astro.locals.t("skipLink.label")}</a>
+
+<style>
+    @layer starlight.core {
+        a {
+            clip: rect(0, 0, 0, 0);
+            position: fixed;
+            top: 0.75rem;
+            inset-inline-start: 0.75rem;
+            border-radius: 0.375rem;
+        }
+        a:focus {
+            clip: unset;
+            z-index: var(--sl-z-index-skiplink);
+            font-size: var(--sl-text-sm);
+            display: block;
+            padding: 0.5rem;
+            text-decoration: none;
+            color: var(--sl-color-gray-2);
+            background-color: var(--sl-color-bg);
+        }
+    }
+</style>

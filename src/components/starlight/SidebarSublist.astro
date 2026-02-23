@@ -1,0 +1,194 @@
+---
+import { Badge } from "@astrojs/starlight/components";
+import SidebarRestorePoint from "node_modules/@astrojs/starlight/components/SidebarRestorePoint.astro";
+import type { SidebarEntry } from "node_modules/@astrojs/starlight/utils/routing/types";
+import Icon from "@/components/Icons.astro";
+import type { StarlightIcon } from "../Icons";
+
+interface Props {
+    sublist: SidebarEntry[];
+    nested?: boolean;
+}
+
+const { sublist, nested } = Astro.props;
+
+const RespectiveIcons: Record<string, StarlightIcon> = {
+    "Get Started": "terminal",
+    "Core Runtime": "cog",
+    "File & Module System": "file",
+    "HTTP server": "server",
+    Networking: "globe",
+    "Data & Storage": "database",
+    Concurrency: "split",
+    "Process & System": "computer",
+    "Interlop & Tooling": "puzzle",
+    Utilities: "wrench",
+    "Standards & Compatibility": "badge-check",
+    Contributing: "heart",
+    "Core Commands": "terminal",
+    "Publishing & Analysis": "upload",
+    "Workspace Management": "folders",
+    "Advanced Configuration": "settings",
+    Core: "package",
+    "Development Server": "monitor",
+    "Asset Processing": "image",
+    "Single File Executable": "binary",
+    Extensions: "plug",
+    Optimization: "zap",
+    Migration: "arrow-right",
+    "Getting Started": "circle-play",
+    "Test Execution": "zap",
+    "Test Features": "sparkles",
+    "Specialized Testing": "microscope",
+    Reporting: "file-text",
+};
+---
+
+<ul class:list={{ "top-level": !nested }}>
+    {
+        sublist.map((entry, i) => (
+            <li>
+                {entry.type === "link" ? (
+                    <a
+                        href={entry.href}
+                        aria-current={entry.isCurrent ? "page" : undefined}
+                        class:list={[{ large: !nested }, entry.attrs.class]}
+                        {...entry.attrs}
+                        aria-label={entry.label}
+                    >
+                        <span>{entry.label}</span>
+                        {entry.badge && (
+                            <Badge
+                                variant={entry.badge.variant}
+                                class={entry.badge.class}
+                                text={entry.badge.text}
+                            />
+                        )}
+                    </a>
+                ) : (
+                    <div>
+                        <div class="summary">
+                            <Icon
+                                name={RespectiveIcons[entry.label] ?? "cog"}
+                                class="caret"
+                                size="0.875rem"
+                            />
+                            <span class="group-label">
+                                <span class="large">{entry.label}</span>
+                                {entry.badge && (
+                                    <Badge
+                                        variant={entry.badge.variant}
+                                        class={entry.badge.class}
+                                        text={entry.badge.text}
+                                    />
+                                )}
+                            </span>
+                        </div>
+                        <SidebarRestorePoint />
+                        <Astro.self sublist={entry.entries} nested />
+                        {i !== sublist.length - 1 && <hr />}
+                    </div>
+                )}
+            </li>
+        ))
+    }
+</ul>
+
+<style>
+    @layer starlight.core {
+        hr {
+            margin-block: 1em;
+            /*color: var(--sl-color-gray-5);*/
+            border: 0;
+            height: 1px;
+            background-color: var(--sl-color-gray-6);
+        }
+        ul {
+            --sl-sidebar-item-padding-inline: 0.8rem;
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            overflow-wrap: anywhere;
+        }
+
+        ul ul li {
+            /*margin-inline-start: var(--sl-sidebar-item-padding-inline);*/
+            /*border-inline-start: 1px solid var(--sl-color-hairline-light);*/
+            /*padding-inline-start: var(--sl-sidebar-item-padding-inline);*/
+        }
+
+        .large {
+            font-size: var(--sl-text-lg);
+            font-weight: 600;
+            color: var(--sl-color-white);
+        }
+
+        .top-level > li + li {
+            margin-top: 0.75rem;
+        }
+
+        .summary {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            padding: 0.2em var(--sl-sidebar-item-padding-inline) 0.4em;
+            line-height: 1.4;
+            cursor: pointer;
+            user-select: none;
+        }
+        summary::marker,
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .caret {
+            transition: transform 0.2s ease-in-out;
+            /*flex-shrink: 0;*/
+        }
+        :global([dir="rtl"]) .caret {
+            transform: rotateZ(180deg);
+        }
+
+        a {
+            display: block;
+            border-radius: 999px;
+            text-decoration: none;
+            color: var(--sl-color-gray-3);
+            font-weight: 500;
+            padding: 0.4em var(--sl-sidebar-item-padding-inline);
+            line-height: 1.4;
+        }
+
+        a:hover,
+        a:focus {
+            color: var(--sl-color-white);
+        }
+
+        [aria-current="page"],
+        [aria-current="page"]:hover,
+        [aria-current="page"]:focus {
+            font-weight: 600;
+            color: var(--sl-color-red);
+            background-color: hsl(from var(--sl-color-red-high) h s l / 0.1);
+        }
+
+        a > *:not(:last-child),
+        .group-label > *:not(:last-child) {
+            margin-inline-end: 0.25em;
+        }
+
+        @media (min-width: 50rem) {
+            .top-level > li + li {
+                margin-top: 0.5rem;
+            }
+            .large {
+                font-size: var(--sl-text-sm);
+            }
+            a {
+                font-size: var(--sl-text-sm);
+            }
+        }
+    }
+</style>

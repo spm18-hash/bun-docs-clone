@@ -1,0 +1,192 @@
+---
+export interface Props {
+    // The ID of the <ul> element containing the Tabs
+    triggerId: string;
+    // The ID of the <div> element containing the panels
+    panelId: string;
+    // (Optional) Index of the tab to open by default
+    initialTab?: number;
+}
+
+const { triggerId, panelId, initialTab = 0 } = Astro.props;
+---
+
+<tab-controller
+    data-trigger-id={triggerId}
+    data-panel-id={panelId}
+    data-initial-tab={initialTab}><slot /></tab-controller
+>
+
+<script>
+    class TabController extends HTMLElement {
+        private triggers: HTMLElement[] = [];
+        private panels: HTMLElement[] = [];
+        private initialized = false;
+        private currentIndex = 0;
+        private handleSyncBound: (e: Event) => void;
+
+        constructor() {
+            super();
+            this.handleSyncBound = this.handleSync.bind(this);
+        }
+
+        private handleSync(e: Event) {
+            const newIndex = (e as CustomEvent).detail as number;
+            console.log("event recieved");
+            if (
+                typeof newIndex === "number" &&
+                newIndex !== this.currentIndex
+            ) {
+                this.switchTab(newIndex, false);
+            }
+        }
+
+        connectedCallback() {
+            if (this.initialized) return;
+
+            // 1. GET CONFIG FROM DATA ATTRIBUTES
+            const triggerContainerId = this.dataset.triggerId;
+            const panelContainerId = this.dataset.panelId;
+            let initialIndex = parseInt(this.dataset.initialTab || "0");
+
+            if (!triggerContainerId || !panelContainerId) return;
+
+            // 2. FIND ELEMENTS GLOBALLY (document.getElementById)
+            const triggerList = this.querySelector(`#${triggerContainerId}`);
+            // Instead of looking inside 'this', we look at the whole page
+            const panelContainer = document.getElementById(panelContainerId);
+
+            if (!triggerList) {
+                console.warn(
+                    `Tabs: Could not find elements with IDs: ${triggerContainerId}`,
+                );
+                return;
+            }
+            if (!panelContainer) {
+                console.warn(
+                    `Tabs: Could not find elements with IDs: ${panelContainerId}`,
+                );
+                return;
+            }
+
+            // Get direct children (links and divs)
+            // We use Array.from to ensure we can map/forEach easily
+            this.triggers = Array.from(triggerList.querySelectorAll("a"));
+            this.panels = Array.from(panelContainer.children) as HTMLElement[];
+
+            // 3. SETUP ACCESSIBLITY & EVENTS
+            triggerList.setAttribute("role", "tablist");
+
+            this.triggers.forEach((tab, index) => {
+                const panel = this.panels[index];
+                if (!panel) return;
+
+                // Generate unique IDs for ARIA if they don't exist
+                const uniqueId = Math.random().toString(36).substring(2, 9);
+                const tabId = tab.id || `tab-${uniqueId}`;
+                const panelId = panel.id || `panel-${index}`;
+
+                // Set Tab attributes
+                tab.setAttribute("id", tabId);
+                tab.setAttribute("role", "tab");
+                tab.parentElement?.setAttribute("role", "presentation");
+                tab.setAttribute("aria-controls", panelId);
+                tab.setAttribute("aria-selected", "false");
+                tab.setAttribute("tabindex", "-1");
+
+                // Set Panel Attributes
+                panel.setAttribute("id", panelId);
+                panel.setAttribute("role", "tabpanel");
+                panel.setAttribute("aria-labelledby", tabId);
+                panel.hidden = true;
+
+                // Click Event
+                tab.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    this.switchTab(index, true);
+                });
+
+                // Keyboard Navigation (Arrows)
+                tab.addEventListener("keydown", (e) => {
+                    let targetIndex: number | null = null;
+                    if (e.key === "ArrowLeft") targetIndex = index - 1;
+                    if (e.key === "ArrowRight") targetIndex = index + 1;
+                    if (e.key === "Home") targetIndex = 0;
+                    if (e.key === "End") targetIndex = this.triggers.length - 1;
+
+                    if (targetIndex !== null && this.triggers[targetIndex]) {
+                        e.preventDefault();
+                        this.switchTab(targetIndex, true);
+                        this.triggers[targetIndex].focus();
+                    }
+                });
+            });
+
+            // Listen for changes from the mobile Select component
+            window.addEventListener("sync-tab-state", this.handleSyncBound);
+
+            const activeLink = panelContainer.querySelector(
+                'a[aria-current="page"]',
+            );
+
+            if (activeLink) {
+                const activePanel = activeLink?.closest('[role="tabpanel"]');
+                if (activePanel) {
+                    initialIndex = this.panels.indexOf(
+                        activePanel as HTMLElement,
+                    );
+                }
+            } else {
+                const savedIndex = sessionStorage.getItem(
+                    "starlight-active-tab",
+                );
+                if (savedIndex !== null) {
+                    initialIndex = parseInt(savedIndex, 10);
+                }
+            }
+
+            // 4. ACTIVATE INITIAL TAB
+            if (this.triggers[initialIndex]) {
+                this.switchTab(initialIndex, false);
+            }
+
+            this.initialized = true;
+        }
+
+        disconnectedCallback() {
+            window.removeEventListener("sync-tab-state", this.handleSyncBound);
+        }
+
+        switchTab(index: number, emitEvent: boolean = true) {
+            if (this.initialized && this.currentIndex === index) return;
+            this.currentIndex = index;
+
+            sessionStorage.setItem("starlight-active-tab", index.toString());
+
+            // Deactivate all
+            this.triggers.forEach((t) => {
+                t.setAttribute("aria-selected", "false");
+                t.setAttribute("tabindex", "-1");
+            });
+            this.panels.forEach((p) => (p.hidden = true));
+
+            // Activate specific
+            const activeTab = this.triggers[index];
+            const activePanel = this.panels[index];
+
+            if (activeTab && activePanel) {
+                activeTab.setAttribute("aria-selected", "true");
+                activeTab.removeAttribute("tabindex");
+                activePanel.hidden = false;
+            }
+
+            // Broadcast state change to other components
+            if (emitEvent) {
+                window.dispatchEvent(
+                    new CustomEvent("sync-tab-state", { detail: index }),
+                );
+            }
+        }
+    }
+    customElements.define("tab-controller", TabController);
+</script>
