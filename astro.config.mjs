@@ -4,14 +4,13 @@ import { defineConfig, fontProviders } from "astro/config";
 
 const SITE_URL =
   process.env.NODE_ENV === "production"
-    ? "https://bun-docs-clone.pages.dev/docs"
-    : "http://localhost:4321/docs";
+    ? "https://bun-docs-clone.pages.dev"
+    : "http://localhost:4321";
 
 // https://astro.build/config
 export default defineConfig({
   site: SITE_URL,
   build: { inlineStylesheets: "always" },
-  base: "/docs",
   trailingSlash: "always",
   experimental: {
     fonts: [
