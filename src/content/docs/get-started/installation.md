@@ -1,6 +1,7 @@
 ---
 title: Installation
 description: File types and loaders supported by Bun's bundler and runtime
+parentDirectory: Get Started
 ---
 
 The Bun bundler implements a set of default loaders out of the box. As a rule of thumb, the bundler and the runtime both support the same set of file types out of the box.
