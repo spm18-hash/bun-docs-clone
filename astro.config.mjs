@@ -43,6 +43,7 @@ export default defineConfig({
       expressiveCode: {
         themes: ["dracula", "github-light-default"],
         styleOverrides: {
+          codeFontSize: "0.9em",
           frames: {
             terminalTitlebarBackground: "red",
             inlineButtonBackgroundHoverOrFocusOpacity:
@@ -69,10 +70,16 @@ export default defineConfig({
             {
               label: "Core Runtime",
               items: [
-                { label: "Bun Runtime", slug: "runtime/core/bun-runtime" },
-                { label: "Watch Mode", slug: "runtime/core/watch-mode" },
-                { label: "Debugging", slug: "runtime/core/debugging" },
-                { label: "bunfig.toml", slug: "runtime/core/bunfig" },
+                {
+                  label: "Bun Runtime",
+                  slug: "runtime/core-runtime/bun-runtime",
+                },
+                {
+                  label: "Watch Mode",
+                  slug: "runtime/core-runtime/watch-mode",
+                },
+                { label: "Debugging", slug: "runtime/core-runtime/debugging" },
+                { label: "bunfig.toml", slug: "runtime/core-runtime/bunfig" },
               ],
             },
             {
@@ -503,6 +510,8 @@ export default defineConfig({
         Hero: "./src/components/starlight/Hero.astro",
         SkipLink: "./src/components/starlight/SkipLink.astro",
         Head: "./src/components/starlight/Head.astro",
+        PageTitle: "./src/components/starlight/PageTitle.astro",
+        PageSidebar: "./src/components/starlight/PageSidebar.astro",
       },
     }),
   ],
