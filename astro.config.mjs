@@ -31,7 +31,7 @@ export default defineConfig({
   },
   integrations: [
     starlight({
-      title: "My Docs",
+      title: "Bun",
       social: [
         {
           icon: "github",
