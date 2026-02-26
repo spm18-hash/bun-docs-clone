@@ -371,7 +371,7 @@ export default defineConfig({
               items: [
                 {
                   label: "Fullstack dev server",
-                  slug: "bundler/development-server/fullstack-development-server",
+                  slug: "bundler/development-server/fullstack-dev-server",
                 },
                 {
                   label: "Hot reloading",

@@ -1,5 +1,5 @@
 ---
-title: Fullstack Development Server
+title: Fullstack dev server
 description: File types and loaders supported by Bun's bundler and runtime
 parentDirectory: Development Server
 ---
