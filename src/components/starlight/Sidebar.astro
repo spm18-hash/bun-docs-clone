@@ -3,13 +3,9 @@ import type { StarlightRouteData } from "@astrojs/starlight/route-data";
 
 import SidebarPersister from "@astrojs/starlight/components/SidebarPersister.astro";
 import SidebarSublist from "@/components/starlight/SidebarSublist.astro";
-import { Icon } from "@astrojs/starlight/components";
-import TabbedContent from "../tabs/TabbedContent.astro";
-import TabListItem from "../tabs/TabListItem.astro";
 import TabPanel from "../tabs/TabPanel.astro";
-import TabController from "../tabs/TabController.astro";
 import Select from "../tabs/Select.astro";
-const { sidebar, id } = Astro.locals.starlightRoute;
+const { sidebar } = Astro.locals.starlightRoute;
 
 type SidebarEntry = StarlightRouteData["sidebar"][number];
 
@@ -27,10 +23,7 @@ assertGroups(sidebar);
 
 const makeId = (label: string) =>
     `__tab-${label.toLowerCase().replaceAll(/\s+/g, "-")}`;
-const getIcon = (index: number) =>
-    (["rocket", "open-book", "information", "puzzle", "setting"] as const)[
-        index
-    ];
+
 const isCurrent = (sidebar: SidebarEntry[]): boolean =>
     sidebar
         .map((entry) =>
