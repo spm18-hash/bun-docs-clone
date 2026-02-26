@@ -1,11 +1,51 @@
 ---
 const { hero } = Astro.locals.starlightRoute.entry.data;
+const { title, tagline } = hero!;
 ---
 
-<h1>Hero</h1>
+<div class="hero">
+    <div class="stack" style="--stack-gap: 0.7rem;">
+        <h1 set:html={title} />
+        <p set:html={tagline} />
+    </div>
+</div>
 
 <style>
+    .hero {
+        margin-top: 2rem;
+        max-width: 46rem;
+
+        margin-inline: auto;
+    }
+    .stack {
+        display: flex;
+        flex-direction: column;
+        gap: var(--stack-gap, 1.5rem);
+        h1 {
+            line-height: 1;
+            color: white;
+            letter-spacing: -0.025em;
+        }
+        p {
+            font-size: 1.125em;
+            color: var(--sl-color-gray-3);
+        }
+    }
+
     :global([data-has-hero] .sl-container) {
         max-width: 100%;
+        margin-inline: auto;
+    }
+
+    :global([data-has-hero] .sl-markdown-content) {
+        max-width: 46rem;
+        margin-inline: auto;
+    }
+
+    @media (width >= 90em) {
+        :global([data-has-hero] .sl-markdown-content),
+        .hero {
+            margin-inline: calc(65% - 46rem) auto;
+        }
     }
 </style>
