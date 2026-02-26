@@ -1,0 +1,75 @@
+---
+import Icons from "./Icons.astro";
+
+const filteredSegments = Astro.url.pathname
+    .split("/")
+    .filter((segment) => segment !== "");
+
+const pathSegments =
+    filteredSegments.length > 1
+        ? filteredSegments.slice(-2)[0].split("-").join(" ")
+        : "Get Started";
+const { title } = Astro.locals.starlightRoute.entry.data;
+
+const breadcrumbList = Array.from([pathSegments, title]);
+---
+
+<nav aria-label="Breadcrumb" class="breadcrumb-container">
+    <ol>
+        <li>
+            <a href="#" class="previous-page">{breadcrumbList[0]}</a>
+        </li>
+        <Icons name="chevron-down" class="chevron-right" />
+        <li>
+            <a
+                href={Astro.url.pathname}
+                aria-current="page"
+                class="current-page">{breadcrumbList[1]}</a
+            >
+        </li>
+    </ol>
+</nav>
+
+<style>
+    .breadcrumb-container {
+        margin-left: calc(var(--sl-menu-button-size) + 4px);
+
+        @media (min-width: 64rem) {
+            display: none;
+        }
+
+        & a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        & ol {
+            display: flex;
+            padding: 0;
+            margin: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 14px;
+            line-height: 20px;
+
+            & li {
+                list-style-type: none;
+
+                & a[aria-current="page"] {
+                    color: var(--sl-color-white);
+                    font-weight: 500;
+                }
+            }
+        }
+    }
+
+    .previous-page {
+        text-transform: capitalize;
+    }
+
+    .chevron-right {
+        transform: rotate(-90deg);
+        color: var(--sl-color-white);
+    }
+</style>

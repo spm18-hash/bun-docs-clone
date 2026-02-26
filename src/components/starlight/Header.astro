@@ -10,8 +10,9 @@ import Icon from "@/components/Icons.astro";
 import type { StarlightRouteData } from "@astrojs/starlight/route-data";
 import TabListItem from "../tabs/TabListItem.astro";
 import TabController from "../tabs/TabController.astro";
+import Breadcrumb from "../Breadcrumb.astro";
 
-const { sidebar, id } = Astro.locals.starlightRoute;
+const { sidebar } = Astro.locals.starlightRoute;
 type SidebarEntry = StarlightRouteData["sidebar"][number];
 
 type Group = Extract<SidebarEntry, { type: "group" }>;
@@ -63,6 +64,8 @@ const shouldRenderSearch =
         </div>
     </div>
 
+    <Breadcrumb />
+
     <TabController triggerId="main-nav-tabs" panelId="panels">
         <ul
             id="main-nav-tabs"
@@ -90,6 +93,7 @@ const shouldRenderSearch =
         .header-container {
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
             height: 100%;
             max-width: 90rem;
             margin-inline: auto;
