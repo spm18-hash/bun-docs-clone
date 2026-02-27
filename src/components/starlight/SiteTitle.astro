@@ -1,11 +1,23 @@
 ---
 import logo from "@/assets/logo-with-wordmark-light.svg?raw";
+import logoDark from "@/assets/logo-with-wordmark-dark.svg?raw";
 
 const main = Astro.site;
 ---
 
 <span class="site-title sl-flex">
-    <a class="astro-logo" href={main} set:html={logo} aria-label="Astro" />
+    <a
+        class="astro-logo--light"
+        href={main}
+        set:html={logo}
+        aria-label="Astro"
+    />
+    <a
+        class="astro-logo--dark"
+        href={main}
+        set:html={logoDark}
+        aria-label="Astro"
+    />
 </span>
 
 <style>
@@ -17,8 +29,16 @@ const main = Astro.site;
         display: flex;
     }
 
-    .astro-logo {
-        color: var(--sl-color-white);
+    /* Hide the logo that matches the theme appearance */
+    :global(:root[data-theme="light"] .astro-logo--light),
+    :global(:root[data-theme="dark"] .astro-logo--dark) {
+        display: none;
+    }
+
+    /* Show the logo that contrasts with the theme */
+    :global(:root[data-theme="light"] .astro-logo--dark),
+    :global(:root[data-theme="dark"] .astro-logo--light) {
+        display: block;
     }
 
     .site-title a:focus-visible {

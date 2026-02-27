@@ -206,20 +206,20 @@ if (project.trailingSlash === "never")
 
         @media (min-width: 64rem) {
             button[data-open-modal] {
-                border: 1px solid hsl(from var(--sl-color-gray-5) h s 12%);
+                border: 1px solid var(--card-border);
                 border-radius: 999px;
                 height: 36px;
                 padding-block: 0;
                 padding-inline-start: 0.875rem;
                 padding-inline-end: 0.75rem;
-                background-color: hsl(from var(--sl-color-black) h s 10% / 0.5);
+                background-color: var(--card-bg);
                 color: var(--sl-color-gray-2);
                 font-size: var(--sl-text-sm);
                 width: 100%;
                 max-width: 22rem;
             }
             button[data-open-modal]:hover {
-                background-color: hsl(from var(--sl-color-black) h s 15% / 0.5);
+                background-color: var(--card-bg-hover);
             }
 
             button[data-open-modal] > :last-child {

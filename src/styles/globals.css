@@ -7,7 +7,11 @@
     --sl-content-gap-y: 1.5rem;
     --sl-color-text-accent: var(--sl-color-red);
 
-    --sl-color-text: hsl(from var(--sl-color-gray-2) h s 65%);
+    --sl-color-text: hsl(from var(--sl-color-gray-2) h s 55%);
+
+    --card-bg: hsl(from var(--sl-color-black) h s l / 0.5);
+    --card-border: hsl(from var(--sl-color-gray-5) h s 90%);
+    --card-bg-hover: hsl(from var(--card-bg) h s 95%);
 
     @media (min-width: 50em) {
         --sl-nav-height: 7.25rem;
@@ -35,6 +39,11 @@
     --sl-color-bg-nav: var(--sl-color-bg);
     --sl-color-bg-sidebar: var(--sl-color-bg);
     --sl-color-hairline-shade: hsl(224 10% 15%);
+    --sl-color-text: hsl(from var(--sl-color-gray-2) h s 65%);
+
+    --card-bg: hsl(from var(--sl-color-black) h s 10% / 0.5);
+    --card-border: hsl(from var(--sl-color-gray-5) h s 15%);
+    --card-bg-hover: hsl(from var(--card-bg) h s 15%);
 
     .sl-markdown-content code:not(:where(.not-content *)) {
         background-color: hsl(from white h s l / 0.05);
@@ -170,7 +179,7 @@ starlight-menu-button[aria-expanded="true"] {
 .sl-markdown-content code:not(:where(.not-content *)) {
     font-weight: 500;
     background-color: hsl(from var(--sl-color-gray-2) h s l / 0.05);
-    color: white;
+    color: var(--sl-color-white);
     font-size: var(--sl-text-sm);
     border-radius: 0.375rem;
     padding: 0.125rem 0.5rem;
@@ -259,4 +268,13 @@ body::after {
 
 .main-frame {
     padding-top: var(--sl-nav-height);
+}
+
+[data-has-hero] .sl-container > footer {
+    max-width: 46rem;
+    margin-inline: auto;
+
+    @media (width >= 90em) {
+        margin-inline: calc(65% - 46rem) auto;
+    }
 }
