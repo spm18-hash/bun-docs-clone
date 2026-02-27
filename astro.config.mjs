@@ -512,6 +512,7 @@ export default defineConfig({
         Head: "./src/components/starlight/Head.astro",
         PageTitle: "./src/components/starlight/PageTitle.astro",
         PageSidebar: "./src/components/starlight/PageSidebar.astro",
+        PageFrame: "./src/components/starlight/PageFrame.astro",
       },
     }),
   ],

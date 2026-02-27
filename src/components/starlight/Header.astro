@@ -3,7 +3,7 @@ import SiteTitle from "./SiteTitle.astro";
 import config from "virtual:starlight/user-config";
 
 import LanguageSelect from "@astrojs/starlight/components/LanguageSelect.astro";
-import Search from "@astrojs/starlight/components/Search.astro";
+import Search from "@/components/starlight/Search.astro";
 import SocialIcons from "@astrojs/starlight/components/SocialIcons.astro";
 import ThemeSelect from "@astrojs/starlight/components/ThemeSelect.astro";
 import Icon from "@/components/Icons.astro";
@@ -11,6 +11,7 @@ import type { StarlightRouteData } from "@astrojs/starlight/route-data";
 import TabListItem from "../tabs/TabListItem.astro";
 import TabController from "../tabs/TabController.astro";
 import Breadcrumb from "../Breadcrumb.astro";
+import MobileMenuToggle from "./MobileMenuToggle.astro";
 
 const { sidebar } = Astro.locals.starlightRoute;
 type SidebarEntry = StarlightRouteData["sidebar"][number];
@@ -55,7 +56,7 @@ const shouldRenderSearch =
         <div class="sl-flex print:hidden search">
             {shouldRenderSearch && <Search />}
         </div>
-        <div class="sl-hidden md:sl-flex print:hidden right-group">
+        <div class="print:hidden right-group">
             <div class="sl-flex social-icons">
                 <SocialIcons />
             </div>
@@ -64,7 +65,10 @@ const shouldRenderSearch =
         </div>
     </div>
 
-    <Breadcrumb />
+    <div class="toggle-breadcrumb-container">
+        <MobileMenuToggle />
+        <Breadcrumb />
+    </div>
 
     <TabController triggerId="main-nav-tabs" panelId="panels">
         <ul
@@ -89,6 +93,16 @@ const shouldRenderSearch =
 </div>
 
 <style>
+    .toggle-breadcrumb-container {
+        display: flex;
+        align-items: center;
+        padding-block: 1rem;
+        gap: 1rem;
+
+        @media (min-width: 64rem) {
+            display: none;
+        }
+    }
     @layer starlight.core {
         .header-container {
             display: flex;
@@ -108,10 +122,10 @@ const shouldRenderSearch =
         }
 
         .search {
-            flex: 1;
             justify-content: end;
 
-            @media (min-width: 50rem) {
+            @media (min-width: 64rem) {
+                flex: 1;
                 justify-content: center;
             }
         }
@@ -125,8 +139,13 @@ const shouldRenderSearch =
             flex: 1;
         }
         .right-group {
-            justify-content: end;
-            flex: 1;
+            display: none;
+
+            @media (min-width: 64rem) {
+                display: flex;
+                justify-content: end;
+                flex: 1;
+            }
         }
         .right-group,
         .social-icons {
