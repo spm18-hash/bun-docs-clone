@@ -58,6 +58,13 @@ export const LucideIcons = {
     '<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>',
   "text-align-start":
     '<path d="M21 5H3"/><path d="M15 12H3"/><path d="M21 19H3"/>',
+  download:
+    '<path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/>',
+  menu: '<path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/>',
+  close: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+  "text-align-justify":
+    '<path d="M3 5h18"/><path d="M3 12h18"/><path d="M3 19h18"/>',
+  search: '<path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/>',
 };
 
 export const Icons = { ...LucideIcons };
