@@ -32,6 +32,11 @@
     );
 }
 
+.sl-markdown-content hr {
+    display: block;
+    margin-top: calc(var(--sl-content-gap-y) * 1.75);
+}
+
 :root[data-theme="dark"],
 [data-theme="dark"],
 ::backdrop {
