@@ -10,7 +10,7 @@
     --sl-color-text: hsl(from var(--sl-color-gray-2) h s 65%);
 
     @media (min-width: 50em) {
-        --sl-nav-height: 6rem;
+        --sl-nav-height: 7.25rem;
         [data-has-sidebar] {
             --sl-content-inline-start: 30rem;
         }
@@ -43,17 +43,6 @@
 
 header {
     padding: var(--sl-nav-pad-y) var(--sl-nav-pad-x);
-}
-
-starlight-menu-button > button {
-    --padding-x: 0.2rem;
-    background: none;
-    box-shadow: none;
-    color: var(--sl-color-white);
-    padding-inline: var(--padding-x);
-    justify-content: center;
-    inset-inline: calc(var(--sl-nav-pad-x) - var(--padding-x)) 0;
-    top: calc((var(--sl-nav-height) + 3.5rem - var(--sl-menu-button-size)) / 2);
 }
 
 starlight-menu-button[aria-expanded="true"] {
