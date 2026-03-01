@@ -29,6 +29,7 @@
             .right-sidebar-container {
                 order: 2;
                 position: relative;
+                max-width: var(--sl-sidebar-width);
                 width: calc(
                     var(--sl-sidebar-width) +
                         (
@@ -42,7 +43,6 @@
             .right-sidebar {
                 position: fixed;
                 top: 0;
-                border-inline-start: 1px solid var(--sl-color-hairline);
                 padding-top: var(--sl-nav-height);
                 width: 100%;
                 height: 100vh;
@@ -51,7 +51,8 @@
             }
 
             .main-pane {
-                width: 100%;
+                width: calc(100% - var(--sl-sidebar-width));
+                margin-inline-start: 5rem;
             }
 
             :global([data-has-sidebar][data-has-toc]) .main-pane {

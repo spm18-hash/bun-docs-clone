@@ -1,6 +1,6 @@
 ---
 import Icon from "../Icons.astro";
-const { hero, parentDirectory } = Astro.locals.starlightRoute.entry.data;
+const { hero } = Astro.locals.starlightRoute.entry.data;
 
 const { title, tagline } = hero!;
 ---
@@ -26,10 +26,9 @@ const { title, tagline } = hero!;
 
 <style>
     .hero {
-        margin-top: 2rem;
+        margin-top: 1rem;
         padding-bottom: 1rem;
         max-width: 46rem;
-
         margin-inline: auto;
     }
 
@@ -43,10 +42,12 @@ const { title, tagline } = hero!;
         margin-inline: auto;
     }
 
-    @media (width >= 90em) {
-        :global([data-has-hero] .sl-markdown-content),
-        .hero {
-            margin-inline: calc(65% - 46rem) auto;
+    :global([data-has-hero] .sl-container > footer) {
+        max-width: 46rem;
+        margin-inline: auto;
+
+        @media (width >= 90em) {
+            margin-inline: auto;
         }
     }
 

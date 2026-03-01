@@ -1,0 +1,35 @@
+@layer colors {
+    :root {
+        --sl-nav-height: calc(7.25rem + 1px);
+        --sl-nav-pad-y: 0rem;
+        --sl-content-width: 40rem;
+        --sl-font: var(--font-geist);
+        --sl-font-mono: var(--font-geist-mono);
+        --sl-content-gap-y: 1.5rem;
+        --sl-color-text-accent: var(--sl-color-red);
+
+        --sl-color-text: hsl(from var(--sl-color-gray-2) h s 55%);
+
+        --card-bg: hsl(from var(--sl-color-black) h s l / 0.5);
+        --card-border: hsl(from var(--sl-color-gray-5) h s 90%);
+        --card-bg-hover: hsl(from var(--card-bg) h s 95%);
+    }
+
+    :root[data-theme="dark"],
+    [data-theme="dark"],
+    ::backdrop {
+        --sl-color-bg: rgb(14, 11, 14);
+        --sl-color-bg-nav: var(--sl-color-bg);
+        --sl-color-bg-sidebar: var(--sl-color-bg);
+        --sl-color-hairline-shade: hsl(224 10% 15%);
+        --sl-color-text: hsl(from var(--sl-color-gray-2) h s 65%);
+
+        --card-bg: hsl(from var(--sl-color-black) h s 10% / 0.5);
+        --card-border: hsl(from var(--sl-color-gray-5) h s 15%);
+        --card-bg-hover: hsl(from var(--card-bg) h s 15%);
+
+        .sl-markdown-content code:not(:where(.not-content *)) {
+            background-color: hsl(from white h s l / 0.05);
+        }
+    }
+}

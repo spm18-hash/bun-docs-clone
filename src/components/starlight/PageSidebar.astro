@@ -4,7 +4,7 @@ import TableOfContents from "@/components/starlight/TableOfContents.astro";
 
 {
     Astro.locals.starlightRoute.toc && (
-        <div class="right-sidebar-panel sl-hidden lg:sl-block">
+        <div class="right-sidebar-panel">
             <div class="sl-container">
                 <TableOfContents />
             </div>
@@ -16,6 +16,11 @@ import TableOfContents from "@/components/starlight/TableOfContents.astro";
     @layer starlight.core {
         .right-sidebar-panel {
             padding: 1rem var(--sl-sidebar-pad-x);
+            display: none;
+
+            @media (min-width: 80rem) {
+                display: block;
+            }
         }
         .sl-container {
             width: calc(var(--sl-sidebar-width) - 2 * var(--sl-sidebar-pad-x));
