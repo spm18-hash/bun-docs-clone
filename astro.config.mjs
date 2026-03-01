@@ -513,6 +513,8 @@ export default defineConfig({
         PageTitle: "./src/components/starlight/PageTitle.astro",
         PageSidebar: "./src/components/starlight/PageSidebar.astro",
         PageFrame: "./src/components/starlight/PageFrame.astro",
+        TwoColumnContent: "./src/components/starlight/TwoColumnContent.astro",
+        ContentPanel: "./src/components/starlight/ContentPanel.astro",
       },
     }),
   ],

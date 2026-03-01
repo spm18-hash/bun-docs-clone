@@ -38,7 +38,7 @@ const main = Astro.site;
     /* Show the logo that contrasts with the theme */
     :global(:root[data-theme="light"] .astro-logo--dark),
     :global(:root[data-theme="dark"] .astro-logo--light) {
-        display: block;
+        display: flex;
     }
 
     .site-title a:focus-visible {
