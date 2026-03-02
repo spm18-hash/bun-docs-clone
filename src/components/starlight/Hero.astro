@@ -36,6 +36,18 @@ const { title, tagline } = hero!;
     :global([data-has-hero] .sl-markdown-content) {
         max-width: 46rem;
         margin-inline: auto;
+
+        & .level-h2 h2 {
+            font-size: var(--sl-text-h3);
+        }
+    }
+
+    :global([data-has-hero] .sl-markdown-content .level-h2 h2) {
+        font-size: var(--sl-text-h3);
+    }
+
+    :global([data-has-hero] .sl-markdown-content .level-h3 h3) {
+        font-size: var(--sl-text-h4);
     }
 
     :global([data-has-hero] .sl-container > footer) {
