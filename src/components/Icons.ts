@@ -65,6 +65,7 @@ export const LucideIcons = {
   "text-align-justify":
     '<path d="M3 5h18"/><path d="M3 12h18"/><path d="M3 19h18"/>',
   search: '<path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/>',
+  "arrow-up-right": '<path d="M7 7h10v10"/><path d="M7 17 17 7"/>',
 };
 
 export const Icons = { ...LucideIcons };
