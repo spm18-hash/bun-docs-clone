@@ -1,6 +1,7 @@
 ---
 import { PAGE_TITLE_ID } from "@/constants";
-import Icons from "@/components/Icons.astro";
+import MoreActions from "@/components/more-actions/MoreActions.astro";
+
 const { data } = Astro.locals.starlightRoute.entry;
 const { title, description } = data;
 ---
@@ -11,16 +12,10 @@ const { title, description } = data;
         <h1 id={PAGE_TITLE_ID} class="page-title">
             {title}
         </h1>
-        <div class="page-title-actions">
-            <button><div><Icons name="clipboard" />Copy Page</div></button>
-            <button><Icons name="chevron-down" /></button>
-        </div>
+        <MoreActions />
     </div>
     <p>{description}</p>
-    <div class="page-title-actions page-title-actions--mobile">
-        <button><div><Icons name="clipboard" />Copy Page</div></button>
-        <button><Icons name="chevron-down" /></button>
-    </div>
+    <MoreActions isMobile />
 </div>
 
 <style>

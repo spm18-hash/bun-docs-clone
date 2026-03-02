@@ -1,5 +1,7 @@
 ---
 import Icon from "../Icons.astro";
+import MoreActions from "../more-actions/MoreActions.astro";
+
 const { hero } = Astro.locals.starlightRoute.entry.data;
 
 const { title, tagline } = hero!;
@@ -11,16 +13,10 @@ const { title, tagline } = hero!;
         <div class="page-title-container">
             <h1 set:text={title} />
 
-            <div class="page-title-actions">
-                <button><div><Icon name="clipboard" />Copy Page</div></button>
-                <button><Icon name="chevron-down" /></button>
-            </div>
+            <MoreActions />
         </div>
         <p set:html={tagline} />
-        <div class="page-title-actions page-title-actions--mobile">
-            <button><div><Icon name="clipboard" />Copy Page</div></button>
-            <button><Icon name="chevron-down" /></button>
-        </div>
+        <MoreActions isMobile />
     </div>
 </div>
 
@@ -78,62 +74,6 @@ const { title, tagline } = hero!;
             flex-direction: row;
             align-items: center;
             justify-content: space-between;
-        }
-    }
-
-    .page-title-actions {
-        display: none;
-        align-items: center;
-        flex-shrink: 0;
-
-        @media (min-width: 48rem) {
-            display: flex;
-        }
-
-        & button {
-            background-color: var(--sl-color-bg);
-            border: 1px solid var(--sl-color-gray-6);
-            padding: 6px 12px;
-            font-size: 0.875em;
-            color: var(--sl-color-white);
-            font-weight: 500;
-
-            &:hover {
-                background-color: hsl(from var(--sl-color-red) h s 85% / 0.1);
-                border-color: hsl(from var(--sl-color-gray-4) h s l / 0.4);
-            }
-
-            & div,
-            &:nth-child(2) {
-                display: flex;
-                align-items: center;
-                line-height: 20px;
-                gap: 0.7em;
-            }
-
-            &:first-child {
-                border-radius: 0.85em 0 0 0.85em;
-            }
-
-            &:nth-child(2) {
-                border-left: none;
-                padding: 2px 10px;
-                border-radius: 0 0.85em 0.85em 0;
-
-                & svg {
-                    height: 28px;
-                    color: var(--sl-color-gray-3);
-                }
-            }
-        }
-    }
-
-    .page-title-actions--mobile {
-        margin-top: 1rem;
-        display: flex;
-
-        @media (min-width: 48rem) {
-            display: none;
         }
     }
 </style>
