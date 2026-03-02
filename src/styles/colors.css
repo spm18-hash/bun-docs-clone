@@ -6,9 +6,11 @@
         --sl-font: var(--font-geist);
         --sl-font-mono: var(--font-geist-mono);
         --sl-content-gap-y: 1.5rem;
+        --sl-color-red: hsl(337 100% 45%);
+
         --sl-color-text-accent: var(--sl-color-red);
 
-        --sl-color-text: hsl(from var(--sl-color-gray-2) h s 55%);
+        --sl-color-text: hsl(from var(--sl-color-gray-2) h s 45%);
 
         --card-bg: hsl(from var(--sl-color-black) h s l / 0.5);
         --card-border: hsl(from var(--sl-color-gray-5) h s 90%);
@@ -23,6 +25,7 @@
         --sl-color-bg-sidebar: var(--sl-color-bg);
         --sl-color-hairline-shade: hsl(224 10% 15%);
         --sl-color-text: hsl(from var(--sl-color-gray-2) h s 65%);
+        --sl-color-red: hsl(337 100% 72.5%);
 
         --card-bg: hsl(from var(--sl-color-black) h s 10% / 0.5);
         --card-border: hsl(from var(--sl-color-gray-5) h s 15%);
