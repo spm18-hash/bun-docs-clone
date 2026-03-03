@@ -38,7 +38,23 @@ export default defineConfig({
           label: "GitHub",
           href: "https://github.com/withastro/starlight",
         },
+        {
+          icon: "x.com",
+          label: "X (formerly Twitter)",
+          href: "https://x.com/withastro",
+        },
+        {
+          icon: "discord",
+          label: "Discord",
+          href: "https://discord.gg/astro",
+        },
+        {
+          icon: "youtube",
+          label: "YouTube",
+          href: "https://youtube.com/astrodotbuild",
+        },
       ],
+      editLink: { baseUrl: "https://github.com/withastro/starlight" },
       customCss: ["./src/styles/globals.css"],
       expressiveCode: {
         themes: ["dracula", "github-light-default"],
@@ -515,6 +531,7 @@ export default defineConfig({
         PageFrame: "./src/components/starlight/PageFrame.astro",
         TwoColumnContent: "./src/components/starlight/TwoColumnContent.astro",
         ContentPanel: "./src/components/starlight/ContentPanel.astro",
+        Footer: "./src/components/starlight/Footer.astro",
       },
     }),
   ],
