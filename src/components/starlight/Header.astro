@@ -4,7 +4,6 @@ import config from "virtual:starlight/user-config";
 
 import LanguageSelect from "@astrojs/starlight/components/LanguageSelect.astro";
 import Search from "@/components/starlight/Search.astro";
-import SocialIcons from "@astrojs/starlight/components/SocialIcons.astro";
 import ThemeSelect from "@astrojs/starlight/components/ThemeSelect.astro";
 import Icon from "@/components/Icons.astro";
 import type { StarlightRouteData } from "@astrojs/starlight/route-data";
@@ -57,9 +56,6 @@ const shouldRenderSearch =
             {shouldRenderSearch && <Search />}
         </div>
         <div class="print:hidden right-group">
-            <div class="sl-flex social-icons">
-                <SocialIcons />
-            </div>
             <ThemeSelect />
             <LanguageSelect />
         </div>
@@ -147,18 +143,7 @@ const shouldRenderSearch =
                 flex: 1;
             }
         }
-        .right-group,
-        .social-icons {
-            gap: 1rem;
-            align-items: center;
-        }
-        .social-icons::after {
-            content: "";
-            height: 2rem;
-            border-inline-end: 1px solid var(--sl-color-gray-5);
-        }
-
-        @media (min-width: 50rem) {
+        .right-group @media (min-width: 50rem) {
             :global(:root[data-has-sidebar]) {
                 --__sidebar-pad: calc(2 * var(--sl-nav-pad-x));
             }
