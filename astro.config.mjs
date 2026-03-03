@@ -7,11 +7,9 @@ const SITE_URL =
     ? "https://bun-docs-clone.pages.dev"
     : "http://localhost:4321";
 
-// https://astro.build/config
 export default defineConfig({
   site: SITE_URL,
   build: { inlineStylesheets: "always" },
-  trailingSlash: "always",
   experimental: {
     fonts: [
       {
