@@ -94,7 +94,6 @@ const { tabs, styled } = Astro.props;
             // Get relevant elements and collections
             // Note: We use arrow functions or .bind(this) to preserve scope
             const panels = this.querySelectorAll<HTMLElement>("#panels > [id]");
-            console.log(panels);
             const tablist = this.querySelector(".tab-list");
 
             if (!tablist) return; // Safety check
