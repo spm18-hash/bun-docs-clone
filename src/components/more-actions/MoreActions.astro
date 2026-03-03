@@ -404,15 +404,15 @@ const { isMobile = false } = Astro.props;
         private getMarkdownRawUrl(): string {
             let currentPath = window.location.pathname;
 
-            if (currentPath.length === 1) {
-                return `/raw${currentPath}index.md/`;
+            if (currentPath === "/") {
+                return `/raw/index.md`;
             }
 
             if (currentPath.endsWith("/")) {
                 currentPath = currentPath.slice(0, -1);
             }
 
-            return `/raw${currentPath}.md/`;
+            return `/raw${currentPath}.md`;
         }
     }
 
