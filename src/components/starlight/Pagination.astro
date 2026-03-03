@@ -1,0 +1,101 @@
+---
+import Icons from "@/components/Icons.astro";
+
+const { dir, pagination } = Astro.locals.starlightRoute;
+const { prev, next } = pagination;
+const isRtl = dir === "rtl";
+---
+
+<div class="pagination-links print:hidden" dir={dir}>
+    {
+        prev && (
+            <a href={prev.href} rel="prev">
+                <span class="link-title">{prev.label}</span>
+                <span class="sl-flex pagination-item">
+                    <Icons
+                        name={isRtl ? "chevron-right" : "chevron-left"}
+                        size="1.14em"
+                    />
+                    {Astro.locals.t("page.previousLink")}
+                </span>
+            </a>
+        )
+    }
+    {
+        next && (
+            <a href={next.href} rel="next">
+                <span class="link-title">{next.label}</span>
+                <span class="sl-flex pagination-item">
+                    {Astro.locals.t("page.nextLink")}
+                    <Icons
+                        name={isRtl ? "chevron-left" : "chevron-right"}
+                        size="1.14em"
+                    />
+                </span>
+            </a>
+        )
+    }
+</div>
+
+<style>
+    @layer starlight.core {
+        .pagination-links {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        @media (min-width: 64rem) {
+            .pagination-links {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            [rel="prev"] {
+                grid-column: 1 / 2;
+            }
+            [rel="next"] {
+                grid-column: 2 / 3;
+            }
+        }
+
+        a {
+            display: flex;
+            align-items: flex-end;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 0.5rem;
+            width: 100%;
+            border: 1px solid var(--card-border);
+            border-radius: 0.875rem;
+            padding: 1rem;
+            text-decoration: none;
+            color: var(--sl-color-gray-2);
+            overflow-wrap: anywhere;
+
+            &[rel="prev"] {
+                align-items: flex-start;
+            }
+        }
+
+        a:hover {
+            border-color: var(--sl-color-gray-5);
+        }
+
+        .link-title {
+            color: var(--sl-color-white);
+            font-size: var(--sl-text-base);
+            line-height: var(--sl-line-height-headings);
+        }
+
+        svg {
+            flex-shrink: 0;
+        }
+
+        .pagination-item {
+            align-items: center;
+            font-size: 0.875rem;
+            line-height: calc(1.25 / 0.875);
+            gap: 0.25rem;
+            color: var(--sl-color-gray-3);
+        }
+    }
+</style>
