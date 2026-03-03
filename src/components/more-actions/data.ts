@@ -1,16 +1,5 @@
-import type { SvgComponent } from "astro/types";
-
-import MDX from "./assets/mdx.svg";
-import Clipboard from "./assets/clipboard.svg";
-import CursorAI from "./assets/cursor-ai.svg";
-import MCP from "./assets/mcp.svg";
-import Perplexity from "./assets/perplexity.svg";
-import VSCode from "./assets/vscode.svg";
-import Claude from "./assets/claude.svg";
-import ChatGPT from "./assets/chatgpt.svg";
-
 interface MoreAction {
-  icon: SvgComponent & ImageMetadata;
+  icon: string;
   label: string;
   description: string;
   href?: string;
@@ -18,48 +7,43 @@ interface MoreAction {
 
 export const MORE_ACTIONS: MoreAction[] = [
   {
-    icon: Clipboard,
-    label: "Copy Page",
-    description: "Copy page as Markdown for LLMs",
-  },
-  {
-    icon: MDX,
+    icon: "mdx",
     label: "View as Markdown",
     description: "View this page as plain text",
-    href: "/",
+    href: "#view-markdown",
   },
   {
-    icon: ChatGPT,
+    icon: "chatgpt",
     label: "Open in ChatGPT",
     description: "Ask questions about this page",
-    href: "/",
+    href: "#ai-chatgpt",
   },
   {
-    icon: Claude,
+    icon: "claude",
     label: "Open in Claude",
     description: "Ask questions about this page",
-    href: "/",
+    href: "#ai-claude",
   },
   {
-    icon: Perplexity,
+    icon: "perplexity",
     label: "Open in Perplexity",
     description: "Ask questions about this page",
-    href: "/",
+    href: "#ai-perplexity",
   },
   {
-    icon: MCP,
+    icon: "mcp",
     label: "Copy MCP Server",
     description: "Copy MCP Server URL to clipboard",
-    href: "/",
+    href: "/docs/mcp",
   },
   {
-    icon: CursorAI,
+    icon: "cursor-ai",
     label: "Connect to Cursor",
     description: "Install MCP Server on Cursor",
     href: "/",
   },
   {
-    icon: VSCode,
+    icon: "vscode",
     label: "Connect to VSCode",
     description: "Install MCP Server on VSCode",
     href: "/",

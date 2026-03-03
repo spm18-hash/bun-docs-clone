@@ -14,7 +14,9 @@ const { isMobile = false } = Astro.props;
 <more-action
     class:list={["more-actions", { "more-actions--mobile": isMobile }]}
 >
-    <button><div><Icons name="clipboard" />Copy Page</div></button>
+    <button aria-label="Copy page" id="copy-page-button"
+        ><div><Icons name="clipboard" />Copy Page</div></button
+    >
     <button
         aria-label="More actions"
         type="button"
@@ -33,12 +35,11 @@ const { isMobile = false } = Astro.props;
     >
         {
             MORE_ACTIONS.map((action) => (
-                <li role="menuitem">
+                <li role="menuitem" tabindex="-1">
                     <MoreActionItem
-                        icon={action.icon}
+                        actionIcon={action.icon}
                         label={action.label}
                         description={action.description}
-                        href={action.href}
                     />
                 </li>
             ))
@@ -52,6 +53,7 @@ const { isMobile = false } = Astro.props;
         align-items: center;
         flex-shrink: 0;
         position: relative;
+        width: fit-content;
 
         @media (min-width: 48rem) {
             display: flex;
@@ -155,6 +157,10 @@ const { isMobile = false } = Astro.props;
         & li {
             list-style-type: none;
             width: 280px;
+
+            &:focus-visible {
+                border-radius: calc(0.85rem - 0.25rem);
+            }
         }
     }
 
@@ -169,15 +175,23 @@ const { isMobile = false } = Astro.props;
 </style>
 
 <script>
+    import { MORE_ACTIONS } from "./data";
+
     class MoreActions extends HTMLElement {
         private trigger: HTMLElement | null = null;
         private dropdownList: HTMLUListElement | null = null;
+        private markdownRawButton: HTMLButtonElement | null = null;
         private isOpen: boolean = false;
+        private menuItems: HTMLLIElement[] = [];
 
         constructor() {
             super();
 
             this.toggleDropdownList = this.toggleDropdownList.bind(this);
+            this.handleClickOutside = this.handleClickOutside.bind(this);
+            this.handleActionClick = this.handleActionClick.bind(this);
+            this.handleMarkdownRawClick =
+                this.handleMarkdownRawClick.bind(this);
         }
 
         connectedCallback() {
@@ -186,23 +200,213 @@ const { isMobile = false } = Astro.props;
             );
             this.dropdownList =
                 this.querySelector<HTMLUListElement>(".dropdown-menu");
-            console.log(this);
+            this.menuItems = Array.from(
+                this.querySelectorAll("li[role='menuitem']"),
+            );
+            this.markdownRawButton =
+                this.querySelector<HTMLButtonElement>("#copy-page-button");
+
             if (this.trigger) {
                 this.trigger.addEventListener("click", () =>
                     this.toggleDropdownList(),
                 );
             }
+
+            this.menuItems.forEach((item, index) => {
+                item.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    this.handleActionClick(index);
+                });
+            });
+
+            if (this.markdownRawButton) {
+                this.markdownRawButton.addEventListener(
+                    "click",
+                    this.handleMarkdownRawClick,
+                );
+            }
+
+            document.addEventListener("click", this.handleClickOutside);
+            this.addEventListener("keydown", this.handleMenuKeydown);
+        }
+
+        disconnectedCallback() {
+            document.removeEventListener("click", this.handleClickOutside);
+            document.removeEventListener("keydown", this.handleMenuKeydown);
+            this.markdownRawButton?.removeEventListener(
+                "click",
+                this.handleMarkdownRawClick,
+            );
+        }
+
+        private handleMenuKeydown(e: KeyboardEvent) {
+            if (e.key === "Escape") {
+                this.closeDropdownList();
+                this.trigger?.focus();
+                return;
+            }
+
+            if (!this.isOpen) return;
+
+            const currentIndex = this.menuItems.indexOf(
+                document.activeElement as HTMLLIElement,
+            );
+
+            if (e.key === "ArrowDown") {
+                e.preventDefault();
+                const nextIndex =
+                    currentIndex === this.menuItems.length - 1
+                        ? 0
+                        : currentIndex + 1;
+                this.menuItems[nextIndex]?.focus();
+                this.menuItems[nextIndex]?.setAttribute("tabindex", "0");
+                this.menuItems[currentIndex]?.setAttribute("tabindex", "-1");
+            }
+            if (e.key === "ArrowUp") {
+                e.preventDefault();
+                const newIndex =
+                    currentIndex <= 0
+                        ? this.menuItems.length - 1
+                        : currentIndex - 1;
+                this.menuItems[newIndex]?.focus();
+                this.menuItems[newIndex]?.setAttribute("tabindex", "0");
+                this.menuItems[currentIndex]?.setAttribute("tabindex", "-1");
+            }
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                if (currentIndex !== -1) {
+                    this.handleActionClick(currentIndex);
+                }
+            }
+        }
+
+        private temporarilyUpdateButtonUI(newHTML: string) {
+            if (!this.markdownRawButton) return;
+
+            const originalHTML = this.markdownRawButton.innerHTML;
+            this.markdownRawButton.innerHTML = newHTML;
+
+            setTimeout(() => {
+                if (this.markdownRawButton) {
+                    this.markdownRawButton.innerHTML = originalHTML;
+                }
+            }, 2000);
+        }
+
+        private async handleMarkdownRawClick() {
+            if (!this.markdownRawButton) return;
+
+            const rawUrl = this.getMarkdownRawUrl();
+
+            try {
+                const response = await fetch(rawUrl);
+
+                if (!response.ok) {
+                    throw new Error(
+                        `Failed to fetch raw markdown: ${response.status} ${response.statusText}`,
+                    );
+                }
+
+                const rawMarkdown = await response.text();
+                await navigator.clipboard.writeText(rawMarkdown);
+
+                this.temporarilyUpdateButtonUI(
+                    `<div class="astro-pb3oosuk"><svg aria-hidden="true" class="astro-pb3oosuk astro-apb64oph" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="--sl-icon-size: 1em;"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>Copied!</div>`,
+                );
+            } catch (err) {
+                console.error("Failed to fetch raw markdown: ", err);
+                this.temporarilyUpdateButtonUI(
+                    `<div class="astro-pb3oosuk"><svg aria-hidden="true" class="astro-pb3oosuk astro-apb64oph" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="--sl-icon-size: 1.2em;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>Failed</div>`,
+                );
+            }
+        }
+
+        private closeDropdownList() {
+            this.isOpen = false;
+            this.trigger?.setAttribute("aria-expanded", this.isOpen.toString());
+            this.dropdownList?.setAttribute("data-state", "closed");
+        }
+
+        private handleClickOutside(event: MouseEvent) {
+            if (this.isOpen && !this.contains(event.target as Node)) {
+                this.closeDropdownList();
+            }
         }
 
         private toggleDropdownList() {
-            this.isOpen = !this.isOpen;
-            this.trigger?.setAttribute("aria-expanded", this.isOpen.toString());
-
             if (this.isOpen) {
-                this.dropdownList?.setAttribute("data-state", "open");
+                this.closeDropdownList();
+
+                this.trigger?.focus();
             } else {
-                this.dropdownList?.setAttribute("data-state", "closed");
+                this.isOpen = true;
+                this.trigger?.setAttribute(
+                    "aria-expanded",
+                    this.isOpen.toString(),
+                );
+                this.dropdownList?.setAttribute("data-state", "open");
+
+                requestAnimationFrame(() => {
+                    let itemToFocus =
+                        this.dropdownList?.querySelector<HTMLLIElement>(
+                            'li[tabindex="0"]',
+                        );
+
+                    if (!itemToFocus) {
+                        itemToFocus =
+                            this.dropdownList?.querySelector<HTMLLIElement>(
+                                "li[role=menuitem]",
+                            );
+
+                        itemToFocus?.setAttribute("tabindex", "0");
+                    }
+
+                    itemToFocus?.focus();
+                });
             }
+        }
+
+        private async handleActionClick(index: number) {
+            const actionConfig = MORE_ACTIONS[index];
+
+            if (!actionConfig || !actionConfig.href) return;
+
+            const href = actionConfig.href;
+
+            if (href.startsWith("#ai-")) {
+                const aiName = href.replace("#ai-", "");
+                const pageUrl = window.location.href;
+                const encodedPrompt = encodeURIComponent(
+                    `I have a question about the content on this page: ${pageUrl}\n\n`,
+                );
+
+                const aiUrls: Record<string, string> = {
+                    chatgpt: `https://chatgpt.com/?prompt=${encodedPrompt}`,
+                    perplexity: `https://perplexity.ai/?q=${encodedPrompt}`,
+                    claude: `https://claude.ai/new?q=${encodedPrompt}`,
+                };
+
+                const targetUrl = aiUrls[aiName];
+
+                if (targetUrl) {
+                    window.open(targetUrl, "_blank");
+                }
+            }
+
+            if (href === "#view-markdown") {
+                const rawUrl = this.getMarkdownRawUrl();
+                window.open(rawUrl, "_blank");
+            }
+
+            this.closeDropdownList();
+        }
+
+        private getMarkdownRawUrl(): string {
+            let currentPath = window.location.pathname;
+            if (currentPath.endsWith("/")) {
+                currentPath = currentPath.slice(0, -1);
+            }
+            return `/raw${currentPath}.md/`;
         }
     }
 

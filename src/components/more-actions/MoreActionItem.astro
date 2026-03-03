@@ -3,29 +3,42 @@ import type { SvgComponent } from "astro/types";
 import Icons from "../Icons.astro";
 
 interface Props {
-    icon: SvgComponent & ImageMetadata;
+    actionIcon: string;
     label: string;
     description: string;
-    href?: string;
 }
 
-const { icon, label, description, href } = Astro.props;
+const { actionIcon, label, description } = Astro.props;
 
-const Icon = icon;
+const svgImports = import.meta.glob<{ default: SvgComponent }>(
+    "./assets/*.svg",
+    { eager: true },
+);
+
+const actionIconPath = `./assets/${actionIcon}.svg`;
+
+const ActionIcon = svgImports[actionIconPath]?.default;
+
+if (!ActionIcon) {
+    console.warn(`No icon found for ${actionIcon}`);
+}
 ---
 
 <div class="item-container">
-    <div class="icon">
-        <Icon />
-    </div>
+    {
+        ActionIcon && (
+            <div class="icon">
+                <ActionIcon />
+            </div>
+        )
+    }
     <div>
         <div class="label-container">
             <h3>{label}</h3>
-            {href && <Icons name="arrow-up-right" size="0.75em" />}
+            {(<Icons name="arrow-up-right" size="0.75em" />)}
         </div>
         <p>{description}</p>
     </div>
-    {href && <a href={href} aria-label={label} />}
 </div>
 
 <style>
