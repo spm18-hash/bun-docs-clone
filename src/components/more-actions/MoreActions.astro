@@ -405,14 +405,14 @@ const { isMobile = false } = Astro.props;
             let currentPath = window.location.pathname;
 
             if (currentPath === "/") {
-                return `/raw/index.md`;
+                return `/index.md`;
             }
 
             if (currentPath.endsWith("/")) {
                 currentPath = currentPath.slice(0, -1);
             }
 
-            return `/raw${currentPath}.md`;
+            return `${currentPath}.md`;
         }
     }
 
