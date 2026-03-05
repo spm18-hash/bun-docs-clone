@@ -1,4 +1,4 @@
-import { PAGE_TITLE_ID } from "@/constants";
+import { PAGE_TITLE_ID } from "@/const";
 
 export class StarlightTOC extends HTMLElement {
   private _current = this.querySelector<HTMLAnchorElement>(
