@@ -1,11 +1,7 @@
 // @ts-check
+import { SITE_URL } from "./src/const";
 import starlight from "@astrojs/starlight";
 import { defineConfig, fontProviders } from "astro/config";
-
-const SITE_URL =
-  process.env.NODE_ENV === "production"
-    ? "https://bun-docs-clone.pages.dev"
-    : "http://localhost:4321";
 
 export default defineConfig({
   site: SITE_URL,
