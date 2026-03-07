@@ -120,6 +120,7 @@ const { isMobile = false } = Astro.props;
         --dd-x-start: 0.8rem;
         --dd-y-start: -0.8rem;
         --dd-scale-x-open: 0.95;
+        --transition-duration: 135ms;
 
         z-index: 3;
         background-color: var(--sl-color-bg);
@@ -137,9 +138,9 @@ const { isMobile = false } = Astro.props;
         opacity: 0;
 
         transition:
-            display 0.1s ease-in-out allow-discrete,
-            transform 0.1s ease-in-out allow-discrete,
-            opacity 0.1s ease-in-out allow-discrete;
+            display var(--transition-duration) ease-in-out allow-discrete,
+            transform var(--transition-duration) ease-in-out allow-discrete,
+            opacity var(--transition-duration) ease-in-out allow-discrete;
 
         &[data-state="open"] {
             display: block;
@@ -207,14 +208,17 @@ const { isMobile = false } = Astro.props;
                 this.querySelector<HTMLButtonElement>("#copy-page-button");
 
             if (this.trigger) {
-                this.trigger.addEventListener("click", () =>
-                    this.toggleDropdownList(),
-                );
+                this.trigger.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.toggleDropdownList();
+                });
             }
 
             this.menuItems.forEach((item, index) => {
-                item.addEventListener("click", (e) => {
+                item.addEventListener("pointerup", (e) => {
                     e.preventDefault();
+                    e.stopPropagation();
                     this.handleActionClick(index);
                 });
             });
@@ -226,12 +230,15 @@ const { isMobile = false } = Astro.props;
                 );
             }
 
-            document.addEventListener("click", this.handleClickOutside);
+            document.addEventListener("pointerdown", this.handleClickOutside);
             this.addEventListener("keydown", this.handleMenuKeydown);
         }
 
         disconnectedCallback() {
-            document.removeEventListener("click", this.handleClickOutside);
+            document.removeEventListener(
+                "pointerdown",
+                this.handleClickOutside,
+            );
             document.removeEventListener("keydown", this.handleMenuKeydown);
             this.markdownRawButton?.removeEventListener(
                 "click",
@@ -327,7 +334,7 @@ const { isMobile = false } = Astro.props;
             this.dropdownList?.setAttribute("data-state", "closed");
         }
 
-        private handleClickOutside(event: MouseEvent) {
+        private handleClickOutside(event: PointerEvent) {
             if (this.isOpen && !this.contains(event.target as Node)) {
                 this.closeDropdownList();
             }
