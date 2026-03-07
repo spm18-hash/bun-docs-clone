@@ -4,6 +4,7 @@ import Icons from "@/components/Icons.astro";
 
 <starlight-menu-button class="print:hidden">
     <button
+        id="mobile-menu-btn"
         aria-expanded="false"
         aria-label={Astro.locals.t("menuButton.accessibleLabel")}
         aria-controls="starlight__sidebar"
@@ -85,7 +86,6 @@ import Icons from "@/components/Icons.astro";
         }
 
         :global([data-theme="light"]) button {
-            background-color: var(--sl-color-black);
             color: var(--sl-color-white);
         }
     }

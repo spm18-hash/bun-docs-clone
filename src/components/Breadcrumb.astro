@@ -1,31 +1,24 @@
 ---
 import Icons from "./Icons.astro";
 
-const filteredSegments = Astro.url.pathname
-    .split("/")
-    .filter((segment) => segment !== "");
-
-const pathSegments =
-    filteredSegments.length > 1
-        ? filteredSegments.slice(-2)[0].split("-").join(" ")
-        : "Get Started";
-const { title } = Astro.locals.starlightRoute.entry.data;
-
-const breadcrumbList = Array.from([pathSegments, title]);
+const currentPage = Astro.locals.starlightRoute.entry.data.title;
+const parentDirectory = Astro.locals.starlightRoute.entry.data.parentDirectory;
 ---
 
 <nav aria-label="Breadcrumb" class="breadcrumb-container">
     <ol>
         <li>
-            <a href="#" class="previous-page">{breadcrumbList[0]}</a>
+            <span
+                id="breadcrumb-toggle"
+                role="button"
+                tabindex="0"
+                aria-label="Toggle sidebar menu"
+                class="previous-page">{parentDirectory}</span
+            >
         </li>
         <Icons name="chevron-down" class="chevron-right" />
         <li>
-            <a
-                href={Astro.url.pathname}
-                aria-current="page"
-                class="current-page">{breadcrumbList[1]}</a
-            >
+            <span aria-current="page" class="current-page">{currentPage}</span>
         </li>
     </ol>
 </nav>
@@ -34,10 +27,6 @@ const breadcrumbList = Array.from([pathSegments, title]);
     .breadcrumb-container {
         @media (min-width: 64rem) {
             display: none;
-        }
-
-        & a {
-            text-decoration: none;
         }
 
         & ol {
@@ -53,7 +42,7 @@ const breadcrumbList = Array.from([pathSegments, title]);
             & li {
                 list-style-type: none;
 
-                & a[aria-current="page"] {
+                & span[aria-current="page"] {
                     color: var(--sl-color-white);
                     font-weight: 500;
                 }
@@ -71,3 +60,25 @@ const breadcrumbList = Array.from([pathSegments, title]);
         color: var(--sl-color-white);
     }
 </style>
+
+<script>
+    const breadcrumbToggle = document.getElementById("breadcrumb-toggle");
+
+    const menuButton = document.getElementById("mobile-menu-btn");
+
+    if (
+        breadcrumbToggle instanceof HTMLSpanElement &&
+        menuButton instanceof HTMLButtonElement
+    ) {
+        breadcrumbToggle.addEventListener("click", () => {
+            menuButton.click();
+        });
+
+        breadcrumbToggle.addEventListener("keydown", (e: KeyboardEvent) => {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                menuButton.click();
+            }
+        });
+    }
+</script>
