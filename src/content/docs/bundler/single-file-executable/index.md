@@ -1,5 +1,5 @@
 ---
-title: Single file executable
+title: Single-file executable
 description: File types and loaders supported by Bun's bundler and runtime
 parentDirectory: Single File Executable
 ---
