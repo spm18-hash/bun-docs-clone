@@ -1,7 +1,6 @@
 ---
 title: Debugging
 description: Debug your Bun code an interactive debugger using WebKit Inspector Protocol
-parentDirectory: Core Runtime
 ---
 
 Bun speaks the [WebKit Inspector Protocol](https://github.com/oven-sh/bun/blob/main/packages/bun-inspector-protocol/src/protocol/jsc/index.d.ts), so you can debug your code with an interactive debugger. For demonstration purposes, consider the following simple web server.

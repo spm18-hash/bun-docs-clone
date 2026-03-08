@@ -1,8 +1,41 @@
 ---
 import Icons from "./Icons.astro";
 
-const currentPage = Astro.locals.starlightRoute.entry.data.title;
-const parentDirectory = Astro.locals.starlightRoute.entry.data.parentDirectory;
+import type { SidebarEntry } from "node_modules/@astrojs/starlight/utils/routing/types";
+
+const {
+    sidebar,
+    entry: {
+        data: { title: currentPage },
+    },
+} = Astro.locals.starlightRoute;
+
+function getActiveBreadcrumb(sidebar: SidebarEntry[]) {
+    let result = { parent: null as string | null, current: currentPage };
+
+    function search(
+        entries: SidebarEntry[],
+        parentLabel: string | null,
+    ): boolean {
+        for (const item of entries) {
+            if (item.type === "link" && item.isCurrent) {
+                result = { parent: parentLabel, current: item.label };
+                return true;
+            }
+
+            if (item.type === "group") {
+                const foundLabel = search(item.entries, item.label);
+                if (foundLabel) return true;
+            }
+        }
+        return false;
+    }
+
+    search(sidebar, null);
+    return result;
+}
+
+const { parent, current } = getActiveBreadcrumb(sidebar);
 ---
 
 <nav aria-label="Breadcrumb" class="breadcrumb-container">
@@ -13,12 +46,12 @@ const parentDirectory = Astro.locals.starlightRoute.entry.data.parentDirectory;
                 role="button"
                 tabindex="0"
                 aria-label="Toggle sidebar menu"
-                class="previous-page">{parentDirectory}</span
+                class="previous-page">{parent}</span
             >
         </li>
         <Icons name="chevron-down" class="chevron-right" />
         <li>
-            <span aria-current="page" class="current-page">{currentPage}</span>
+            <span aria-current="page" class="current-page">{current}</span>
         </li>
     </ol>
 </nav>
