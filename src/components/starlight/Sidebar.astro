@@ -45,7 +45,7 @@ const isCurrent = (sidebar: SidebarEntry[]): boolean =>
     </div>
 </SidebarPersister>
 
-<style>
+<!-- <style>
     /** Add "EN" to the end of sidebar items with the `fallback` class. */
     :global(.fallback)::after {
         content: "EN";
@@ -55,14 +55,14 @@ const isCurrent = (sidebar: SidebarEntry[]): boolean =>
     }
 
     /** Align sponsors at sidebar bottom when there is room. */
-    .desktop-footer {
+    /*.desktop-footer {
         margin-top: auto;
-    }
+    }*/
 
     /** Always show the scrollbar gutter. */
-    /*:global(.sidebar-pane) {
+    :global(.sidebar-pane) {
         overflow-y: scroll;
-    }*/
+    }
 
     /* Styles for the custom tab switcher. */
     .tabbed-sidebar {
@@ -91,11 +91,11 @@ const isCurrent = (sidebar: SidebarEntry[]): boolean =>
         --tab-item-background-color--active: var(--sl-color-black);
     }
     /* Dark theme variations */
-    :global([data-theme="dark"]) .tabbed-sidebar {
+    /*:global([data-theme="dark"]) .tabbed-sidebar {
         --tab-switcher-text-color: var(--sl-color-gray-2);
         --tab-switcher-icon-color: var(--sl-color-gray-3);
         --tab-item-background-color--hover: var(--sl-color-gray-5);
-    }
+    }*/
 
     @media (min-width: 50rem) {
         /* Dark theme variations with the desktop sidebar visible */
@@ -152,4 +152,4 @@ const isCurrent = (sidebar: SidebarEntry[]): boolean =>
     .tab-item :global(a[aria-selected="true"]) .icon {
         color: var(--tab-switcher-icon-color--active);
     }
-</style>
+</style> -->
