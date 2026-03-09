@@ -2,7 +2,7 @@ import type { StarlightUserConfig } from "@astrojs/starlight/types";
 
 import navLabels from "../content/nav/nav";
 
-type NavKey = keyof typeof navLabels;
+export type NavKey = keyof typeof navLabels;
 
 type StarlightSidebarConfig = NonNullable<StarlightUserConfig["sidebar"]>;
 type StarlightSidebarEntry = StarlightSidebarConfig[number];

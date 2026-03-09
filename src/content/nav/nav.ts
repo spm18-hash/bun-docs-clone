@@ -1,6 +1,6 @@
 export default {
   runtime: "Runtime",
-  "runtime.getStarted": "Welcome to Bun",
+  "runtime.getStarted": "Get started",
   "runtime.coreRuntime": "Core Runtime",
   "runtime.File&ModuleSystem": "File & Module System",
   "runtime.httpServer": "HTTP Server",

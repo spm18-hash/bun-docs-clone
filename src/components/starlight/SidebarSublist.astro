@@ -3,7 +3,7 @@ import { Badge } from "@astrojs/starlight/components";
 import SidebarRestorePoint from "node_modules/@astrojs/starlight/components/SidebarRestorePoint.astro";
 import type { SidebarEntry } from "node_modules/@astrojs/starlight/utils/routing/types";
 import Icon from "@/components/Icons.astro";
-import type { StarlightIcon } from "../Icons";
+import { getGroupIcon } from "@/utils/navIcons";
 
 interface Props {
     sublist: SidebarEntry[];
@@ -11,37 +11,6 @@ interface Props {
 }
 
 const { sublist, nested } = Astro.props;
-
-const RespectiveIcons: Record<string, StarlightIcon> = {
-    "Get Started": "terminal",
-    "Core Runtime": "cog",
-    "File & Module System": "file",
-    "HTTP server": "server",
-    Networking: "globe",
-    "Data & Storage": "database",
-    Concurrency: "split",
-    "Process & System": "computer",
-    "Interlop & Tooling": "puzzle",
-    Utilities: "wrench",
-    "Standards & Compatibility": "badge-check",
-    Contributing: "heart",
-    "Core Commands": "terminal",
-    "Publishing & Analysis": "upload",
-    "Workspace Management": "folders",
-    "Advanced Configuration": "settings",
-    Core: "package",
-    "Development Server": "monitor",
-    "Asset Processing": "image",
-    "Single File Executable": "binary",
-    Extensions: "plug",
-    Optimization: "zap",
-    Migration: "arrow-right",
-    "Getting Started": "circle-play",
-    "Test Execution": "zap",
-    "Test Features": "sparkles",
-    "Specialized Testing": "microscope",
-    Reporting: "file-text",
-};
 ---
 
 <ul class:list={{ "top-level": !nested }}>
@@ -69,7 +38,7 @@ const RespectiveIcons: Record<string, StarlightIcon> = {
                     <div>
                         <div class="summary">
                             <Icon
-                                name={RespectiveIcons[entry.label] ?? "cog"}
+                                name={getGroupIcon(entry.label)}
                                 class="caret"
                                 size="0.875rem"
                             />
