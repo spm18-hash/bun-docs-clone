@@ -67,7 +67,6 @@ const { sublist, nested } = Astro.props;
     @layer starlight.core {
         hr {
             margin-block: 1em;
-            /*color: var(--sl-color-gray-5);*/
             border: 0;
             height: 1px;
             background-color: var(--sl-color-gray-6);
@@ -82,14 +81,8 @@ const { sublist, nested } = Astro.props;
             overflow-wrap: anywhere;
         }
 
-        ul ul li {
-            /*margin-inline-start: var(--sl-sidebar-item-padding-inline);*/
-            /*border-inline-start: 1px solid var(--sl-color-hairline-light);*/
-            /*padding-inline-start: var(--sl-sidebar-item-padding-inline);*/
-        }
-
         .large {
-            font-size: var(--sl-text-lg);
+            font-size: var(--sl-text-sm);
             font-weight: 600;
             color: var(--sl-color-white);
         }
@@ -114,7 +107,6 @@ const { sublist, nested } = Astro.props;
 
         .caret {
             transition: transform 0.2s ease-in-out;
-            /*flex-shrink: 0;*/
         }
         :global([dir="rtl"]) .caret {
             transform: rotateZ(180deg);
@@ -128,6 +120,7 @@ const { sublist, nested } = Astro.props;
             font-weight: 500;
             padding: 0.4em var(--sl-sidebar-item-padding-inline);
             line-height: 1.4;
+            font-size: var(--sl-text-sm);
         }
 
         a:hover,
@@ -140,7 +133,7 @@ const { sublist, nested } = Astro.props;
         [aria-current="page"]:focus {
             font-weight: 600;
             color: var(--sl-color-red);
-            background-color: hsl(from var(--sl-color-red-high) h s l / 0.1);
+            background-color: hsl(from var(--sl-color-red-high) h s 70% / 0.1);
         }
 
         a > *:not(:last-child),

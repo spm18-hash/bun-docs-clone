@@ -56,8 +56,7 @@ export default defineConfig({
           codeFontSize: "0.9em",
           frames: {
             terminalTitlebarBackground: "red",
-            inlineButtonBackgroundHoverOrFocusOpacity:
-              "0.05" /* CSS line 121 */,
+            inlineButtonBackgroundHoverOrFocusOpacity: "0.05",
           },
         },
       },
