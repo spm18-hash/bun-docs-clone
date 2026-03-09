@@ -6,7 +6,6 @@ import { sidebar } from "./astro.sidebar";
 
 export default defineConfig({
   site: SITE_URL,
-  // build: { inlineStylesheets: "always" },
   experimental: {
     fonts: [
       {

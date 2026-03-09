@@ -1,16 +1,23 @@
 ---
 import { PAGE_TITLE_ID } from "@/const";
 import MoreActions from "@/components/more-actions/MoreActions.astro";
+import { getActiveBreadcrumb } from "@/components/Breadcrumb.astro";
 
-const { data } = Astro.locals.starlightRoute.entry;
-const { title, description } = data;
+const {
+    sidebar,
+    entry: {
+        data: { title: currentPage, description },
+    },
+} = Astro.locals.starlightRoute;
+
+const { parent, current } = getActiveBreadcrumb(sidebar, currentPage);
 ---
 
 <div class="page-meta-container">
-    <span>{data.parentDirectory}</span>
+    <span>{parent}</span>
     <div class="page-title-container">
         <h1 id={PAGE_TITLE_ID} class="page-title">
-            {title}
+            {current}
         </h1>
         <MoreActions />
     </div>

@@ -10,7 +10,10 @@ const {
     },
 } = Astro.locals.starlightRoute;
 
-function getActiveBreadcrumb(sidebar: SidebarEntry[]) {
+export function getActiveBreadcrumb(
+    sidebar: SidebarEntry[],
+    currentPage: string,
+) {
     let result = { parent: null as string | null, current: currentPage };
 
     function search(
@@ -35,7 +38,7 @@ function getActiveBreadcrumb(sidebar: SidebarEntry[]) {
     return result;
 }
 
-const { parent, current } = getActiveBreadcrumb(sidebar);
+const { parent, current } = getActiveBreadcrumb(sidebar, currentPage);
 ---
 
 <nav aria-label="Breadcrumb" class="breadcrumb-container">
