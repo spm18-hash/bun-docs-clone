@@ -8,7 +8,7 @@ export const GET = (async () => {
   const docs = await getCollection("docs");
 
   const docLinks = docs
-    .map((doc) => `- [${doc.data.title}](${site}/raw/${doc.id}.md)`)
+    .map((doc) => `- [${doc.data.title}](${site}/${doc.id}.md)`)
     .join("\n");
 
   const header = `# ${SITE_TITLE}\n\n## Docs\n\n`;
@@ -16,6 +16,10 @@ export const GET = (async () => {
   const final = composeMarkdown(header, docLinks);
 
   return new Response(final, {
-    headers: { "Content-Type": "text/markdown; charset=utf-8" },
+    headers: {
+      "Content-Type": "text/markdown; charset=utf-8",
+      "Cache-Control":
+        "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
+    },
   });
 }) satisfies APIRoute;
