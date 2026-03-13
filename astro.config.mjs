@@ -6,23 +6,21 @@ import { sidebar } from "./astro.sidebar";
 
 export default defineConfig({
   site: SITE_URL,
-  experimental: {
-    fonts: [
-      {
-        provider: fontProviders.google(),
-        cssVariable: "--font-geist",
-        name: "Geist",
-        styles: ["normal"],
-        weights: [400, 500, 600],
-      },
-      {
-        provider: fontProviders.google(),
-        cssVariable: "--font-geist-mono",
-        name: "Geist Mono",
-        weights: [400, 500],
-      },
-    ],
-  },
+  fonts: [
+    {
+      provider: fontProviders.google(),
+      cssVariable: "--font-geist",
+      name: "Geist",
+      styles: ["normal"],
+      weights: [400, 500, 600],
+    },
+    {
+      provider: fontProviders.google(),
+      cssVariable: "--font-geist-mono",
+      name: "Geist Mono",
+      weights: [400, 500],
+    },
+  ],
   integrations: [
     starlight({
       title: "Bun",
