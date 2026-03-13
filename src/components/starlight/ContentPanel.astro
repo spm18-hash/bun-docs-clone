@@ -6,10 +6,18 @@
     @layer starlight.core {
         .content-panel {
             padding: 1.35rem 0;
+
+            &:has(.not-found) {
+                padding: 12rem 0;
+            }
         }
 
         .sl-container > :global(* + *) {
             margin-top: 1.5rem;
+        }
+
+        .sl-container:has(.not-found) {
+            width: fit-content;
         }
 
         @media (min-width: 72rem) {

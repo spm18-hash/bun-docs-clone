@@ -24,6 +24,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: "Bun",
+      // disable404Route: true,
       social: [
         {
           icon: "github",
