@@ -4,42 +4,47 @@ import FooterPageLink from "@/components/FooterPageLink.astro";
 import FeedbackButton from "../FeedbackButton.astro";
 import SocialIcons from "./SocialIcons.astro";
 
+import { getRoute } from "node_modules/@astrojs/starlight/utils/routing/data";
+const route = await getRoute(Astro);
+
 const { editUrl } = Astro.locals.starlightRoute;
 ---
 
-<footer class="sl-flex">
-    <div class="sl-flex link-container">
-        <div class="sl-flex page-helpful">
-            <p>Was this page helpful?</p>
-            <div class="meta sl-flex">
-                <div class="sl-flex button-group">
-                    <FeedbackButton label="Yes" icon="thumbs-up" />
-                    <FeedbackButton label="No" icon="thumbs-down" />
-                </div>
-                <div class="sl-flex button-group">
-                    {
-                        editUrl && (
+{
+    route.id !== "404" && (
+        <footer class="sl-flex">
+            <div class="sl-flex link-container">
+                <div class="sl-flex page-helpful">
+                    <p>Was this page helpful?</p>
+                    <div class="meta sl-flex">
+                        <div class="sl-flex button-group">
+                            <FeedbackButton label="Yes" icon="thumbs-up" />
+                            <FeedbackButton label="No" icon="thumbs-down" />
+                        </div>
+                        <div class="sl-flex button-group">
+                            {editUrl && (
+                                <FooterPageLink
+                                    href={editUrl}
+                                    label="Suggest edits"
+                                    icon="pencil"
+                                />
+                            )}
                             <FooterPageLink
-                                href={editUrl}
-                                label="Suggest edits"
-                                icon="pencil"
+                                href={"/"}
+                                label="Raise issue"
+                                icon="triangle-alert"
                             />
-                        )
-                    }
-                    <FooterPageLink
-                        href={"/"}
-                        label="Raise issue"
-                        icon="triangle-alert"
-                    />
+                        </div>
+                    </div>
                 </div>
+                <Pagination />
             </div>
-        </div>
-        <Pagination />
-    </div>
-    <div class="sl-flex social-icons">
-        <SocialIcons />
-    </div>
-</footer>
+            <div class="sl-flex social-icons">
+                <SocialIcons />
+            </div>
+        </footer>
+    )
+}
 
 <style>
     @layer starlight.core {

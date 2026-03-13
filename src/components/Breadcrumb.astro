@@ -3,6 +3,9 @@ import Icons from "./Icons.astro";
 
 import type { SidebarEntry } from "node_modules/@astrojs/starlight/utils/routing/types";
 
+import { getRoute } from "node_modules/@astrojs/starlight/utils/routing/data";
+const route = await getRoute(Astro);
+
 const {
     sidebar,
     entry: {
@@ -49,13 +52,21 @@ const { parent, current } = getActiveBreadcrumb(sidebar, currentPage);
                 role="button"
                 tabindex="0"
                 aria-label="Toggle sidebar menu"
-                class="previous-page">{parent}</span
+                class="previous-page">{parent ?? "Page Not Found"}</span
             >
         </li>
-        <Icons name="chevron-down" class="chevron-right" />
-        <li>
-            <span aria-current="page" class="current-page">{current}</span>
-        </li>
+        {
+            route.id !== "404" && (
+                <>
+                    <Icons name="chevron-down" class="chevron-right" />
+                    <li>
+                        <span aria-current="page" class="current-page">
+                            {current}
+                        </span>
+                    </li>
+                </>
+            )
+        }
     </ol>
 </nav>
 

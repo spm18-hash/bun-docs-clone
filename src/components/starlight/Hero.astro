@@ -1,26 +1,106 @@
 ---
-import Icon from "../Icons.astro";
 import MoreActions from "../more-actions/MoreActions.astro";
+import { getRoute } from "node_modules/@astrojs/starlight/utils/routing/data";
+
+const route = await getRoute(Astro);
 
 const { hero } = Astro.locals.starlightRoute.entry.data;
 
 const { title, tagline } = hero!;
 ---
 
-<div class="hero">
-    <div class="page-meta-container">
-        <span>Get Started</span>
-        <div class="page-title-container">
-            <h1 set:text={title} />
+{
+    route.id !== "404" ? (
+        <div class="hero">
+            <div class="page-meta-container">
+                <span>Get Started</span>
+                <div class="page-title-container">
+                    <h1 set:text={title} />
 
-            <MoreActions />
+                    <MoreActions />
+                </div>
+                <p set:html={tagline} />
+                <MoreActions isMobile />
+            </div>
         </div>
-        <p set:html={tagline} />
-        <MoreActions isMobile />
-    </div>
-</div>
+    ) : (
+        <div class="not-found">
+            <div class="content">
+                <span>404</span>
+                <h1>Page Not Found</h1>
+                <p>
+                    We couldn't find the page. Maybe you were looking for one of
+                    these pages below?
+                </p>
+            </div>
+            <div class="links">
+                <a href="runtime/data-storage/sqlite/#as-class-map-query-results-to-a-class">
+                    SQLite
+                </a>
+                <a href="runtime/data-storage/sqlite/#as-class-map-query-results-to-a-class">
+                    Streaming HTTP Server with Async Iterators
+                </a>
+                <a href="runtime/data-storage/sqlite/#as-class-map-query-results-to-a-class">
+                    Color
+                </a>
+            </div>
+        </div>
+    )
+}
 
 <style>
+    /* 1. Group the shared flexbox layout properties */
+    .not-found,
+    .not-found .content,
+    .not-found .links {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* 2. Define the unique styles and gaps for each block */
+    .not-found {
+        gap: 2rem;
+    }
+
+    .not-found .content {
+        gap: 1.5rem;
+        width: fit-content;
+        max-width: 32rem;
+        text-align: center;
+    }
+
+    .not-found .content span {
+        font-size: 3rem;
+        line-height: 1;
+    }
+
+    .not-found .content h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--sl-color-white);
+    }
+
+    .not-found .content p {
+        font-size: var(--sl-text-base);
+        margin: 0;
+    }
+
+    .not-found .links {
+        gap: 0.75rem;
+        font-size: var(--sl-text-base);
+    }
+
+    .not-found .links a {
+        text-decoration: none;
+        color: var(--sl-color-text-accent);
+    }
+
+    .not-found .links a:hover {
+        color: var(--sl-color-text-accent-hover);
+    }
+
     .hero {
         margin-top: 1rem;
         padding-bottom: 1rem;
