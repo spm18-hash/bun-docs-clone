@@ -73,6 +73,7 @@ export default defineConfig({
         ContentPanel: "./src/components/starlight/ContentPanel.astro",
         Footer: "./src/components/starlight/Footer.astro",
       },
+      routeMiddleware: "./src/routeData.ts",
     }),
   ],
 });
