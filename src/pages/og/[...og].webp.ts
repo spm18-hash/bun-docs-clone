@@ -34,11 +34,11 @@ export const GET: APIRoute = async ({ props }) => {
   // 1. --- BACKGROUND IMAGE PREP ---
   // We read the file directly from the disk (instead of using fetch/import)
   // to ensure Satori can reliably access it during Astro's static build process.
-  const bgImagePath = path.resolve("./src/pages/og/_images/background-ltr.png");
-  const bgImageBuffer = await fs.readFile(bgImagePath);
+  // const bgImagePath = path.resolve("./src/pages/og/_images/background-ltr.png");
+  // const bgImageBuffer = await fs.readFile(bgImagePath);
 
   // Satori requires external images to be Base64 Data URLs
-  const base64Image = `data:image/png;base64,${bgImageBuffer.toString("base64")}`;
+  // const base64Image = `data:image/png;base64,${bgImageBuffer.toString("base64")}`;
 
   // 2. --- FONT PREP ---
   // Just like the background image, we bypass the network and load
@@ -62,14 +62,15 @@ export const GET: APIRoute = async ({ props }) => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-start",
-          gap: 96,
+          gap: 128,
           width: "100%",
           height: "100%",
-          backgroundColor: "#fff",
-          fontSize: 32,
-          fontWeight: 600,
-          padding: "100px 140px 40px",
-          backgroundImage: `url("${base64Image}")`,
+          backgroundColor: "#000",
+          padding: "100px 100px 40px",
+          // backgroundImage: `url("${base64Image}")`,
+          backgroundImage:
+            "radial-gradient(circle at 15px 15px, #222 5%, transparent 0%),radial-gradient(circle at 38px 26px, #222 4%, transparent 0%)",
+          backgroundSize: "48px 35px",
         },
         children: [
           // Logo / Icon Section
@@ -81,8 +82,8 @@ export const GET: APIRoute = async ({ props }) => {
               fill: "#fff",
               children: {
                 type: "path",
-                props: { d: "M0.25,0.25 l46.75, 32.25 l-46.75, 32.25 z " }, // play button
-                // props: { d: "M37.5,0.25 l37.25,64.5 l-74.5,0 z" }, // triangle
+                // props: { d: "M0.25,0.25 l46.75, 32.25 l-46.75, 32.25 z " }, // play button
+                props: { d: "M37.5,0.25 l37.25,64.5 l-74.5,0 z" }, // triangle
               },
             },
           },
@@ -92,7 +93,6 @@ export const GET: APIRoute = async ({ props }) => {
             props: {
               style: {
                 color: "#fff",
-                lineHeight: 1.2,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "flex-start",
@@ -104,8 +104,9 @@ export const GET: APIRoute = async ({ props }) => {
                   props: {
                     style: {
                       color: "#fff",
-                      fontSize: 72,
+                      fontSize: 74,
                       lineHeight: 1.2,
+                      fontWeight: 600,
                       margin: 0,
                     },
                     children: `${doc?.data.title || "Documentation"}`,
@@ -116,11 +117,10 @@ export const GET: APIRoute = async ({ props }) => {
                   type: "p",
                   props: {
                     style: {
-                      color: "#bfc1c9",
-                      fontSize: 42,
+                      color: "hsl(0,0%,65%)",
+                      fontSize: 40,
                       lineHeight: 1.2,
-                      fontWeight: 400,
-                      marginTop: 16,
+                      marginTop: 18,
                       textWrap: "pretty", // Ensures nice text wrapping without orphan words
                     },
                     children: `${doc?.data.description || "Description"}`,
