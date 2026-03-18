@@ -16,14 +16,16 @@ import { Resvg } from "@resvg/resvg-js";
 export async function getStaticPaths() {
   const docs = await getCollection("docs");
 
-  return docs.map((doc) => ({
-    params: {
-      og: doc.id,
-    },
-    // We pass the entire document as a prop so the GET function
-    // doesn't have to search for it again!
-    props: { doc },
-  }));
+  return docs
+    .filter((doc) => !doc.id.includes("404"))
+    .map((doc) => ({
+      params: {
+        og: doc.id,
+      },
+      // We pass the entire document as a prop so the GET function
+      // doesn't have to search for it again!
+      props: { doc },
+    }));
 }
 
 /**
