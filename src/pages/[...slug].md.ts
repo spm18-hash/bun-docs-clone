@@ -5,10 +5,12 @@ import type { APIRoute } from "astro";
 export async function getStaticPaths() {
   const docs = await getCollection("docs");
 
-  return docs.map((entry) => ({
-    params: { slug: entry.id },
-    props: { body: entry.body, data: entry.data },
-  }));
+  return docs
+    .filter((doc) => !doc.id.includes("404"))
+    .map((entry) => ({
+      params: { slug: entry.id },
+      props: { body: entry.body, data: entry.data },
+    }));
 }
 
 function toBlockQuote(text?: string): string | null {
