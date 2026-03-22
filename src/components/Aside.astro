@@ -1,0 +1,105 @@
+---
+import { AstroError } from "astro/errors";
+import Icon from "./Icons.astro";
+import { Icons, type StarlightIcon } from "./Icons";
+import { throwInvalidAsideIconError } from "./asides-error";
+
+const asideVariants = ["note", "tip", "caution", "danger"] as const;
+
+const icons = {
+    note: "information",
+    tip: "bulb",
+    caution: "triangle-alert",
+    danger: "octagon-alert",
+} as const;
+
+interface Props {
+    type?: (typeof asideVariants)[number];
+    icon?: StarlightIcon;
+}
+
+let { type = "note", icon } = Astro.props;
+
+if (!asideVariants.includes(type)) {
+    throw new AstroError(
+        "Invalid `type` prop passed to the `<Aside>` component.\n",
+        `Received: ${JSON.stringify(type)}\n` +
+            `Expected one of ${asideVariants.map((i) => JSON.stringify(i)).join(", ")}`,
+    );
+}
+
+if (icon && !Icons[icon]) throwInvalidAsideIconError(icon);
+---
+
+<aside class={`aside aside--${type}`}>
+    <!-- <p class="aside__title" aria-hidden="true"> -->
+    <Icon
+        name={icon || icons[type]}
+        stroke-linejoin={"round"}
+        stroke-linecap={"round"}
+        class="aside__icon"
+    />
+    <!-- </p> -->
+    <div class="aside__content">
+        <slot />
+    </div>
+</aside>
+
+<style>
+    @layer starlight.components {
+        .aside {
+            padding: 1rem;
+            color: var(--sl-color-asides-text-accent);
+            display: flex;
+            gap: 0.75rem;
+            font-size: var(--sl-text-sm);
+            line-height: 20px;
+            border-radius: 14px;
+            border: 1px solid var(--sl-color-asides-border);
+        }
+        .aside--note {
+            --sl-color-asides-text-accent: var(--sl-color-blue-high);
+            --sl-color-asides-border: hsl(from var(--sl-color-blue) h 70% 60%);
+            background-color: hsl(from var(--sl-color-blue-low) h s 12%);
+        }
+        .aside--tip {
+            --sl-color-asides-text-accent: var(--sl-color-purple-high);
+            --sl-color-asides-border: hsl(
+                from var(--sl-color-purple) h 70% 60%
+            );
+            background-color: hsl(from var(--sl-color-purple-low) h s 12%);
+        }
+        .aside--caution {
+            --sl-color-asides-text-accent: var(--sl-color-orange-high);
+            --sl-color-asides-border: hsl(
+                from var(--sl-color-orange) h 70% 60%
+            );
+            background-color: hsl(from var(--sl-color-orange-low) h s 12%);
+        }
+        .aside--danger {
+            --sl-color-asides-text-accent: var(--sl-color-red-high);
+            --sl-color-asides-border: hsl(from var(--sl-color-red) h 70% 60%);
+            background-color: hsl(from var(--sl-color-red-low) h s 12%);
+        }
+
+        .aside__icon {
+            display: inline-block;
+            width: 1lh;
+            height: 1lh;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .aside__content {
+            margin-top: 0;
+
+            ul {
+                padding-left: 1.5rem;
+            }
+        }
+
+        .aside__content a {
+            color: var(--sl-color-asides-text-accent);
+        }
+    }
+</style>
