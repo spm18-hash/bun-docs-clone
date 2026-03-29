@@ -2,6 +2,7 @@ import { generateOgImage } from "./_generateImage";
 import crypto from "node:crypto";
 import path from "node:path";
 import fs from "node:fs/promises";
+import type { APIRoute } from "astro";
 
 import { getCollection } from "astro:content";
 
