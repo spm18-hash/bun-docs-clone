@@ -1,11 +1,9 @@
-import type { APIRoute } from "astro";
-import satori from "satori";
-import sharp from "sharp";
-import fs from "node:fs/promises";
+import { generateOgImage } from "./_generateImage";
+import crypto from "node:crypto";
 import path from "node:path";
+import fs from "node:fs/promises";
 
 import { getCollection } from "astro:content";
-import { Resvg } from "@resvg/resvg-js";
 
 /**
  * GENERATE STATIC PATHS
@@ -33,145 +31,42 @@ export async function getStaticPaths() {
  * Generates the actual WebP image for each path.
  */
 export const GET: APIRoute = async ({ props }) => {
-  // 1. --- BACKGROUND IMAGE PREP ---
-  // We read the file directly from the disk (instead of using fetch/import)
-  // to ensure Satori can reliably access it during Astro's static build process.
-  // const bgImagePath = path.resolve("./src/pages/og/_images/background-ltr.png");
-  // const bgImageBuffer = await fs.readFile(bgImagePath);
-
-  // Satori requires external images to be Base64 Data URLs
-  // const base64Image = `data:image/png;base64,${bgImageBuffer.toString("base64")}`;
-
-  // 2. --- FONT PREP ---
-  // Just like the background image, we bypass the network and load
-  // the raw font files directly into memory for Satori to use.
-  const fontRegular = path.resolve("./src/pages/og/_fonts/Geist-Regular.otf");
-  const fontSemiBold = path.resolve("./src/pages/og/_fonts/Geist-SemiBold.otf");
-
-  const regularBuffer = await fs.readFile(fontRegular);
-  const semiBoldBuffer = await fs.readFile(fontSemiBold);
-
   // Grab the document data passed down from getStaticPaths
   const { doc } = props;
 
-  // 3. --- SATORI SVG GENERATION ---
-  // Satori takes a React-like JSON object and converts it into an SVG string.
-  const svg = await satori(
-    {
-      type: "div",
-      key:"container",
-      props: {
-        style: {
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          gap: 128,
-          width: "100%",
-          height: "100%",
-          backgroundColor: "#000",
-          padding: "100px 100px 40px",
-          backgroundImage:
-            "radial-gradient(circle at 15px 15px, #222 5%, transparent 0%),radial-gradient(circle at 38px 26px, #222 4%, transparent 0%)",
-          backgroundSize: "48px 35px",
-        },
-        children: [
-          {
-            type: "svg",
-            props: {
-              width: "75",
-              viewBox: "0 0 75 65",
-              fill: "#fff",
-              children: {
-                type: "path",
-                props: { d: "M37.5,0.25 l37.25,64.5 l-74.5,0 z" }, // triangle
-              },
-            },
-          },
-          // Text Content Section
-          {
-            type: "div",
-            props: {
-              style: {
-                color: "#fff",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-start",
-              },
-              children: [
-                // Page Title
-                {
-                  type: "h1",
-                  props: {
-                    style: {
-                      color: "#fff",
-                      fontSize: 74,
-                      lineHeight: 1.2,
-                      fontWeight: 600,
-                      margin: 0,
-                    },
-                    children: `${doc?.data.title || "Documentation"}`,
-                  },
-                },
-                {
-                  type: "p",
-                  props: {
-                    style: {
-                      color: "hsl(0,0%,65%)",
-                      fontSize: 40,
-                      lineHeight: 1.2,
-                      marginTop: 18,
-                      textWrap: "pretty",
-                    },
-                    children: `${doc?.data.description || "Description"}`,
-                  },
-                },
-              ],
-            },
-          },
-        ],
+  const hashInput = doc.id;
+  const hash = crypto.createHash("md5").update(hashInput).digest("hex");
+
+  const cacheDir = path.join(process.cwd(), ".cache/og-images");
+  const cachePath = path.join(cacheDir, `${hash}.webp`);
+
+  await fs.mkdir(cacheDir, { recursive: true });
+
+  try {
+    console.error("using cached images");
+
+    // 3. Try to read the image from the local cache
+    const cachedImage = await fs.readFile(cachePath);
+
+    // If successful, return the cached buffer! Satori is bypassed.
+    return new Response(cachedImage, {
+      headers: { "Content-Type": "image/png" },
+    });
+  } catch (error) {
+    console.error("generating new images");
+    const webpBuffer = await generateOgImage(doc);
+
+    await fs.writeFile(cachePath, webpBuffer);
+    const isDev = import.meta.env.DEV;
+
+    return new Response(new Uint8Array(webpBuffer), {
+      headers: {
+        "Content-Type": "image/webp",
+        // Best practice: Tell browsers and CDNs to cache this heavily
+        "Cache-Control": isDev
+          ? "no-store, max-age=0"
+          : "public, max-age=31536000, immutable",
       },
-    },
-    {
-      width: 1200, // Standard Open Graph image width
-      height: 630, // Standard Open Graph image height
-      fonts: [
-        {
-          name: "Geist",
-          data: regularBuffer,
-          weight: 400,
-          style: "normal",
-        },
-        {
-          name: "Geist",
-          data: semiBoldBuffer,
-          weight: 600,
-          style: "normal",
-        },
-      ],
-    },
-  );
-
-  // 4. --- RENDER PIPELINE ---
-  // Step A: Convert the Satori SVG into a PNG using Resvg
-  const resvg = new Resvg(svg, { fitTo: { mode: "width", value: 1200 } });
-  const pngBuffer = resvg.render().asPng();
-
-  // Step B: Compress the PNG into a WebP using Sharp
-  const webpBuffer = await sharp(pngBuffer).webp({ quality: 90 }).toBuffer();
-
-  // 5. --- SEND RESPONSE ---
-  // Return the final WebP image to the browser/Astro build engine
-
-  // Check if we are running 'npm run dev' or 'npm run build'
-  const isDev = import.meta.env.DEV;
-
-  return new Response(new Uint8Array(webpBuffer), {
-    headers: {
-      "Content-Type": "image/webp",
-      // Best practice: Tell browsers and CDNs to cache this heavily
-      "Cache-Control": isDev
-        ? "no-store, max-age=0"
-        : "public, max-age=31536000, immutable",
-    },
-  });
+    });
+  }
 };
