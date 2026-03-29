@@ -9,9 +9,8 @@ export default defineConfig({
   fonts: [
     {
       provider: fontProviders.google(),
-      cssVariable: "--font-geist",
       name: "Geist",
-      styles: ["normal"],
+      cssVariable: "--font-geist",
       weights: [400, 500, 600],
     },
     {
@@ -24,7 +23,6 @@ export default defineConfig({
   integrations: [
     starlight({
       title: "Bun",
-      // disable404Route: true,
       social: [
         {
           icon: "github",

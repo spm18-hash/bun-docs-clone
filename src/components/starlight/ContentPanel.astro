@@ -10,6 +10,10 @@
             &:has(.not-found) {
                 padding: 12rem 0;
             }
+
+            &:has(+ .content-panel) {
+                padding-top: 0;
+            }
         }
 
         .sl-container > :global(* + *) {

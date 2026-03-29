@@ -8,6 +8,8 @@
         --sl-content-gap-y: 1.5rem;
         --sl-color-red: hsl(337 100% 45%);
 
+        --sl-nav-pad-x: 1.25rem;
+
         --sl-color-text-accent: var(--sl-color-red);
 
         --sl-color-text: hsl(from var(--sl-color-gray-2) h s 45%);
@@ -15,6 +17,10 @@
         --card-bg: hsl(from var(--sl-color-black) h s l / 0.5);
         --card-border: hsl(from var(--sl-color-gray-5) h s 90%);
         --card-bg-hover: hsl(from var(--card-bg) h s 95%);
+
+        @media (min-width: 64rem) {
+            --sl-nav-height: calc(6rem + 1px);
+        }
     }
 
     :root[data-theme="dark"],

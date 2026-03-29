@@ -59,6 +59,7 @@ export const GET: APIRoute = async ({ props }) => {
   const svg = await satori(
     {
       type: "div",
+      key:"container",
       props: {
         style: {
           display: "flex",
@@ -69,13 +70,11 @@ export const GET: APIRoute = async ({ props }) => {
           height: "100%",
           backgroundColor: "#000",
           padding: "100px 100px 40px",
-          // backgroundImage: `url("${base64Image}")`,
           backgroundImage:
             "radial-gradient(circle at 15px 15px, #222 5%, transparent 0%),radial-gradient(circle at 38px 26px, #222 4%, transparent 0%)",
           backgroundSize: "48px 35px",
         },
         children: [
-          // Logo / Icon Section
           {
             type: "svg",
             props: {
@@ -84,7 +83,6 @@ export const GET: APIRoute = async ({ props }) => {
               fill: "#fff",
               children: {
                 type: "path",
-                // props: { d: "M0.25,0.25 l46.75, 32.25 l-46.75, 32.25 z " }, // play button
                 props: { d: "M37.5,0.25 l37.25,64.5 l-74.5,0 z" }, // triangle
               },
             },
@@ -114,7 +112,6 @@ export const GET: APIRoute = async ({ props }) => {
                     children: `${doc?.data.title || "Documentation"}`,
                   },
                 },
-                // Page Description
                 {
                   type: "p",
                   props: {
@@ -123,7 +120,7 @@ export const GET: APIRoute = async ({ props }) => {
                       fontSize: 40,
                       lineHeight: 1.2,
                       marginTop: 18,
-                      textWrap: "pretty", // Ensures nice text wrapping without orphan words
+                      textWrap: "pretty",
                     },
                     children: `${doc?.data.description || "Description"}`,
                   },

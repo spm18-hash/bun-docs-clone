@@ -28,11 +28,14 @@ const { parent, current } = getActiveBreadcrumb(sidebar, currentPage);
 <style>
     .page-meta-container {
         margin-top: 1rem;
+        @media (min-width: 80rem) {
+            margin-top: 0;
+        }
     }
     span {
         text-transform: capitalize;
         font-size: 0.875em;
-        font-weight: 500;
+        font-weight: 600;
         color: var(--sl-color-text-accent);
     }
     p {
@@ -111,10 +114,14 @@ const { parent, current } = getActiveBreadcrumb(sidebar, currentPage);
 
     @layer starlight.core {
         h1 {
-            font-size: var(--sl-text-h1);
+            font-size: var(--sl-text-2xl);
             line-height: var(--sl-line-height-headings);
             font-weight: 600;
             color: var(--sl-color-white);
+
+            @media (min-width: 48rem) {
+                font-size: 30px;
+            }
         }
     }
 </style>

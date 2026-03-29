@@ -142,7 +142,7 @@ const { title, tagline } = hero!;
     span {
         text-transform: capitalize;
         font-size: 0.875em;
-        font-weight: 500;
+        font-weight: 600;
         color: var(--sl-color-text-accent);
     }
     p {
@@ -151,18 +151,23 @@ const { title, tagline } = hero!;
         margin-top: 0.8rem;
     }
     .page-title-container {
-        margin-top: 0.5rem;
+        margin-top: 0.625rem;
         display: flex;
         flex-direction: column;
         gap: 1rem;
 
         h1 {
-            line-height: 1;
+            font-size: 1.5rem;
+            line-height: 2rem;
             color: var(--sl-color-white);
             letter-spacing: -0.025em;
+            font-weight: bold;
+            font-family: var(--font-geist-display);
         }
 
         @media (min-width: 48rem) {
+            font-size: 1.875rem;
+            line-height: 2.25rem;
             flex-direction: row;
             align-items: center;
             justify-content: space-between;
