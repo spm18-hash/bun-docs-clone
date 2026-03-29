@@ -23,12 +23,17 @@ const mainPaneWidth =
     @layer starlight.core {
         .container {
             padding: 1.25rem;
-            gap: 6rem;
+            gap: 4rem;
             @media (min-width: 48rem) {
                 padding: 2rem 3.5rem 1.25rem 3.5rem;
             }
+            @media (min-width: 90rem) {
+                gap: 6rem;
+            }
         }
         .main-pane {
+            contain: inline-size;
+            flex-grow: 1;
             isolation: isolate;
         }
 
@@ -58,10 +63,6 @@ const mainPaneWidth =
                 height: 100vh;
                 overflow-y: auto;
                 scrollbar-width: none;
-            }
-
-            .main-pane {
-                width: var(--mainPaneWidth);
             }
 
             :global([data-has-sidebar][data-has-toc]) .main-pane {
