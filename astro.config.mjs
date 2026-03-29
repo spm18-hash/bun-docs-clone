@@ -75,4 +75,11 @@ export default defineConfig({
       routeMiddleware: "./src/routeData.ts",
     }),
   ],
+  markdown: {
+    remarkPlugins: [
+      (tree) => {
+        console.log(tree);
+      },
+    ],
+  },
 });

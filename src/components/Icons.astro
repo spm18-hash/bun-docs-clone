@@ -1,15 +1,16 @@
 ---
 import { Icons as LucideIcons, type StarlightIcon } from "./Icons";
+import type { HTMLAttributes } from "astro/types";
 
-interface Props {
+type Props = {
     name: StarlightIcon;
     label?: string;
     color?: string;
     size?: string;
     class?: string;
-}
+} & HTMLAttributes<"svg">;
 
-const { name, label, size = "1em", color } = Astro.props;
+const { name, label, size = "1em", color, ...props } = Astro.props;
 const a11yAttrs = label
     ? ({ "aria-label": label } as const)
     : ({ "aria-hidden": "true" } as const);
@@ -31,6 +32,7 @@ const a11yAttrs = label
         stroke="currentColor"
         stroke-width="2"
         set:html={LucideIcons[name]}
+        {...props}
     />
 </>
 

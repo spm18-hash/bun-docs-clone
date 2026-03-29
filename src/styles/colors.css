@@ -1,5 +1,6 @@
 @layer colors {
-    :root {
+    :root,
+    ::backdrop {
         --sl-nav-height: calc(7.25rem + 1px);
         --sl-nav-pad-y: 0rem;
         --sl-content-width: 40rem;

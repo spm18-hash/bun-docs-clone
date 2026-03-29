@@ -1,0 +1,40 @@
+<wc-accordion data-slot="accordion">
+    <slot />
+</wc-accordion>
+
+<script>
+    class Accordion extends HTMLElement {
+        constructor() {
+            super();
+        }
+
+        connectedCallback() {
+            const detailsElements: HTMLDetailsElement[] = Array.from(
+                this.querySelectorAll("details"),
+            );
+
+            detailsElements.forEach((detail) => {
+                if (detail.open) {
+                    detailsElements.forEach((otherDetail) => {
+                        if (otherDetail !== detail && otherDetail.open) {
+                            otherDetail.open = false;
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    customElements.define("wc-accordion", Accordion);
+</script>
+
+<style>
+    wc-accordion {
+        display: block;
+        margin-block: 1rem;
+        background-color: var(--color-bg);
+        border: 1px solid var(--sl-color-gray-5);
+        border-radius: 14px;
+        overflow: hidden;
+    }
+</style>
