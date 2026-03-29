@@ -55,15 +55,11 @@ const { isMobile = false } = Astro.props;
         position: relative;
         width: fit-content;
 
-        @media (min-width: 48rem) {
-            display: flex;
-        }
-
         & button {
             background-color: var(--sl-color-bg);
             border: 1px solid var(--sl-color-gray-6);
             padding: 6px 12px;
-            font-size: 0.875em;
+            font-size: 0.875rem;
             color: var(--sl-color-white);
             font-weight: 500;
 
@@ -102,6 +98,10 @@ const { isMobile = false } = Astro.props;
                     color: var(--sl-color-gray-3);
                 }
             }
+        }
+
+        @media (min-width: 48rem) {
+            display: flex;
         }
     }
 

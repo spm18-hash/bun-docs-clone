@@ -11,7 +11,7 @@ export default defineConfig({
       provider: fontProviders.google(),
       name: "Geist",
       cssVariable: "--font-geist",
-      weights: [400, 500, 600],
+      weights: [400, 600],
     },
     {
       provider: fontProviders.google(),
@@ -75,11 +75,4 @@ export default defineConfig({
       routeMiddleware: "./src/routeData.ts",
     }),
   ],
-  markdown: {
-    remarkPlugins: [
-      (tree) => {
-        console.log(tree);
-      },
-    ],
-  },
 });
