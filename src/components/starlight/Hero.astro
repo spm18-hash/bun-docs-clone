@@ -163,11 +163,13 @@ const { title, tagline } = hero!;
             letter-spacing: -0.025em;
             font-weight: bold;
             font-family: var(--font-geist-display);
+            @media (min-width: 48rem) {
+                font-size: 1.875rem;
+                line-height: 2.25rem;
+            }
         }
 
         @media (min-width: 48rem) {
-            font-size: 1.875rem;
-            line-height: 2.25rem;
             flex-direction: row;
             align-items: center;
             justify-content: space-between;
