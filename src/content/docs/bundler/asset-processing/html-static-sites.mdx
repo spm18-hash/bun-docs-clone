@@ -8,7 +8,7 @@ import Aside from "@/components/Aside.astro";
 
 Bun's bundler has first-class support for HTML. Build static sites, landing pages, and web applications with zero configuration. Just point Bun at your HTML file and it handles everything else.
 
-```html label="index.html" icon="file-code"
+```html title="index.html"
 <!doctype html>
 <html>
   <head>
@@ -23,11 +23,11 @@ Bun's bundler has first-class support for HTML. Build static sites, landing page
 
 To get started, pass HTML files to `bun`.
 
-```bash terminal icon="terminal"
+```bash
 bun ./index.html
 ```
 
-```
+```txt
 Bun v1.3.3
 ready in 6.62ms
 → http://localhost:3000/
@@ -49,11 +49,11 @@ Bun's development server provides powerful features with zero configuration:
 
 When you pass a single `.html` file to Bun, Bun will use it as a fallback route for all paths. This makes it perfect for single page apps that use client-side routing:
 
-```bash terminal icon="terminal"
+```bash
 bun index.html
 ```
 
-```
+```txt
 Bun v1.3.3
 ready in 6.62ms
 → http://localhost:3000/
@@ -62,7 +62,7 @@ Press h + Enter to show shortcuts
 
 Your React or other SPA will work out of the box — no configuration needed. All routes like `/about`, `/users/123`, etc. will serve the same HTML file, letting your client-side router handle the navigation.
 
-```html label="index.html" icon="file-code"
+```html title="index.html"
 <!doctype html>
 <html>
   <head>
@@ -79,7 +79,7 @@ Your React or other SPA will work out of the box — no configuration needed. Al
 
 Some projects have several separate routes or HTML files as entry points. To support multiple entry points, pass them all to `bun`:
 
-```bash terminal icon="terminal"
+```bash
 bun ./index.html ./about.html
 ```
 
@@ -102,11 +102,11 @@ This will serve:
 
 To specify multiple files, you can use glob patterns that end in `.html`:
 
-```bash terminal icon="terminal"
+```bash
 bun ./**/*.html
 ```
 
-```
+```txt
 Bun v1.3.3
 ready in 6.62ms
 → http://localhost:3000/
@@ -120,11 +120,11 @@ Press h + Enter to show shortcuts
 
 The base path is chosen from the longest common prefix among all the files.
 
-```bash terminal icon="terminal"
+```bash
 bun ./index.html ./about/index.html ./about/foo/index.html
 ```
 
-```
+```txt
 Bun v1.3.3
 ready in 6.62ms
 → http://localhost:3000/
@@ -160,7 +160,7 @@ For example:
 <Tabs>
 
 <TabItem label="styles.css">
-```css styles.css icon="file-code"
+```css title="styles.css" 
 @import "./abc.css";
 
 .container {
@@ -171,7 +171,7 @@ background-color: blue;
 </TabItem>
 
 <TabItem label="abc.css">
-```css abc.css icon="file-code"
+```css title="abc.css"
 body {
   background-color: red;
 }
@@ -182,7 +182,7 @@ body {
 
 This outputs:
 
-```css styles.css icon="file-code"
+```css title="styles.css"
 body {
   background-color: red;
 }
@@ -196,7 +196,7 @@ body {
 
 You can reference local assets in your CSS files.
 
-```css styles.css icon="file-code"
+```css title="styles.css"
 body {
   background-image: url("./logo.png");
 }
@@ -204,7 +204,7 @@ body {
 
 This will copy `./logo.png` to the output directory and rewrite the path in the CSS file to include a content hash.
 
-```css styles.css icon="file-code"
+```css title="styles.css"
 body {
   background-image: url("./logo-[ABC123].png");
 }
@@ -214,7 +214,7 @@ body {
 
 To associate a CSS file with a JavaScript file, you can import it in your JavaScript file.
 
-```ts app.ts icon="/icons/typescript.svg"
+```ts title="app.ts"
 import "./styles.css";
 import "./more-styles.css";
 ```
@@ -229,14 +229,14 @@ The dev server supports plugins.
 
 To use TailwindCSS, install the `bun-plugin-tailwind` plugin:
 
-```bash terminal icon="terminal"
+```bash
 # Or any npm client
 bun install --dev bun-plugin-tailwind
 ```
 
 Then, add the plugin to your `bunfig.toml`:
 
-```toml label="bunfig.toml" icon="settings"
+```toml title="bunfig.toml"
 [serve.static]
 plugins = ["bun-plugin-tailwind"]
 ```
@@ -246,7 +246,7 @@ Then, reference TailwindCSS in your HTML via `<link>` tag, `@import` in CSS, or 
 <Tabs>
   <TabItem label="index.html">
 
-    ```html label="index.html" icon="file-code"
+    ```html title="index.html" icon="file-code"
     <!-- Reference TailwindCSS in your HTML -->
     <link rel="stylesheet" href="tailwindcss" />
     ```
@@ -254,14 +254,14 @@ Then, reference TailwindCSS in your HTML via `<link>` tag, `@import` in CSS, or 
   </TabItem> 
   <TabItem label="styles.css">
 
-    ```css label="styles.css" icon="file-code"
+    ```css title="styles.css" icon="file-code"
     @import "tailwindcss";
     ```
 
   </TabItem> 
   <TabItem label="app.ts">
 
-    ```ts label="app.ts" icon="/icons/typescript.svg"
+    ```ts title="app.ts"
     import "tailwindcss";
     ```
 
@@ -278,7 +278,7 @@ Bun can replace `process.env.*` references in your JavaScript and TypeScript wit
 
 To inline environment variables when using `bun ./index.html`, configure the `env` option in your `bunfig.toml`:
 
-```toml label="bunfig.toml" icon="settings"
+```toml title="bunfig.toml"
 [serve.static]
 env = "PUBLIC_*"  # only inline env vars starting with PUBLIC_ (recommended)
 # env = "inline"  # inline all environment variables
@@ -296,7 +296,7 @@ If an environment variable is not set, you may see runtime errors like `Referenc
 
 Then run the dev server:
 
-```bash terminal icon="terminal"
+```bash
 PUBLIC_API_URL=https://api.example.com bun ./index.html
 ```
 
@@ -306,7 +306,7 @@ When building static HTML for production, use the `env` option to inline environ
 
 <Tabs>
   <TabItem label="CLI">
-    ```bash terminal icon="terminal"
+    ```bash 
     # Inline all environment variables
     bun build ./index.html --outdir=dist --env=inline
 
@@ -316,7 +316,7 @@ When building static HTML for production, use the `env` option to inline environ
 
   </TabItem> 
   <TabItem label="API">
-    ```ts label="build.ts" icon="/icons/typescript.svg"
+    ```ts title="build.ts" 
     // Inline all environment variables
     await Bun.build({
       entrypoints: ["./index.html"],
@@ -339,20 +339,20 @@ When building static HTML for production, use the `env` option to inline environ
 
 Given this source file:
 
-```ts label="app.ts" icon="/icons/typescript.svg"
+```ts title="app.ts"
 const apiUrl = process.env.PUBLIC_API_URL;
 console.log(`API URL: ${apiUrl}`);
 ```
 
 And running with `PUBLIC_API_URL=https://api.example.com`:
 
-```bash terminal icon="terminal"
+```bash
 PUBLIC_API_URL=https://api.example.com bun build ./index.html --outdir=dist --env=PUBLIC_*
 ```
 
 The bundled output will contain:
 
-```js label="dist/app.js" icon="/icons/javascript.svg"
+```js title="dist/app.js"
 const apiUrl = "https://api.example.com";
 console.log(`API URL: ${apiUrl}`);
 ```
@@ -363,7 +363,7 @@ Bun's dev server supports streaming console logs from the browser to the termina
 
 To enable, pass the `--console` CLI flag.
 
-```bash terminal icon="terminal"
+```bash
 bun ./index.html --console
 ```
 
@@ -396,12 +396,12 @@ When you're ready to deploy, use `bun build` to create optimized production bund
 
 <Tabs>
   <TabItem label="CLI">
-    ```bash terminal icon="terminal"
+    ```bash 
     bun build ./index.html --minify --outdir=dist
     ```
   </TabItem> 
   <TabItem label="API">
-    ```ts label="build.ts" icon="/icons/typescript.svg"
+    ```ts title="build.ts" 
     await Bun.build({
       entrypoints: ["./index.html"],
       outdir: "./dist",
@@ -427,7 +427,7 @@ You can run `bun build --watch` to watch for changes and rebuild automatically. 
 
 Need more control? Configure the bundler through the JavaScript API and use Bun's builtin `HTMLRewriter` to preprocess HTML.
 
-```ts label="build.ts" icon="/icons/typescript.svg"
+```ts title="build.ts"
 await Bun.build({
   entrypoints: ["./index.html"],
   outdir: "./dist",
@@ -494,7 +494,7 @@ This is a small wrapper around Bun's support for HTML imports in JavaScript.
 
 You can bundle your entire frontend into a **single self-contained `.html` file** with no external dependencies using `--compile --target=browser`. All JavaScript, CSS, and images are inlined directly into the HTML.
 
-```bash terminal icon="terminal"
+```bash
 bun build --compile --target=browser ./index.html --outdir=dist
 ```
 
