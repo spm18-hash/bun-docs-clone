@@ -4,15 +4,20 @@
 
 <style>
     @layer starlight.core {
+        .content-panel:has(+ .content-panel) {
+            padding-block: 0 1.25rem;
+        }
         .content-panel {
-            padding: 1.35rem 0;
+            & + .content-panel {
+                padding: 1.25rem 0;
+            }
 
             &:has(.not-found) {
                 padding: 12rem 0;
             }
 
-            &:has(+ .content-panel) {
-                padding-top: 0;
+            @media (min-width: 75rem) {
+                padding: 1.25rem 0;
             }
         }
 
