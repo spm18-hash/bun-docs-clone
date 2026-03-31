@@ -1,5 +1,6 @@
 ---
 const { hasSidebar } = Astro.locals.starlightRoute;
+import Icon from "@/components/Icons.astro";
 ---
 
 <div class="page sl-flex">
@@ -12,8 +13,22 @@ const { hasSidebar } = Astro.locals.starlightRoute;
                     aria-label={Astro.locals.t("sidebarNav.accessibleLabel")}
                 >
                     <div id="starlight__sidebar" class="sidebar-pane">
-                        <div class="sidebar-content sl-flex">
-                            <slot name="sidebar" />
+                        <div class="sidebar-backdrop" id="sidebar-backdrop" />
+
+                        <div class="sl-flex sidebar-content-container">
+                            <button
+                                id="sidebar-close-btn"
+                                class="sidebar-close-btn"
+                                aria-label="Close menu"
+                            >
+                                <Icon name="close" />
+                            </button>
+
+                            <div class="sidebar-scroll-area">
+                                <div class="sidebar-content sl-flex">
+                                    <slot name="sidebar" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </nav>
@@ -23,6 +38,31 @@ const { hasSidebar } = Astro.locals.starlightRoute;
     </div>
 </div>
 
+<script>
+    const menuButton = document.getElementById("mobile-menu-btn");
+    const sidebarElements = [
+        document.getElementById("sidebar-close-btn"),
+        document.getElementById("sidebar-backdrop"),
+    ];
+    const closeMenu = () => {
+        const parent = menuButton?.closest("starlight-menu-button");
+        const isOpen = parent?.getAttribute("aria-expanded") === "true";
+
+        if (menuButton instanceof HTMLButtonElement && isOpen) {
+            menuButton.click();
+        }
+    };
+
+    sidebarElements.forEach((element) =>
+        element?.addEventListener("click", closeMenu),
+    );
+
+    document.addEventListener("keydown", (e) => {
+        if (e.code === "Escape") {
+            closeMenu();
+        }
+    });
+</script>
 <style>
     @layer starlight.core {
         .page {
@@ -44,42 +84,81 @@ const { hasSidebar } = Astro.locals.starlightRoute;
             inset-inline-start: 0;
             inset-block-start: 0;
             width: 100%;
-            height: var(--sl-nav-height);
-            border-bottom: 1px solid var(--sl-color-hairline-shade);
-            padding: var(--sl-nav-pad-y) var(--sl-nav-pad-x);
+            padding-inline: var(--sl-nav-pad-x);
             background-color: var(--sl-color-bg-nav);
+
+            &::after {
+                content: "";
+                position: absolute;
+                inset-inline: 0;
+                z-index: -1;
+                border-bottom: 1px solid var(--sl-color-hairline-shade);
+            }
+        }
+
+        .sidebar-backdrop {
+            position: fixed;
+            inset: 0;
+            height: 100%;
+            backdrop-filter: blur(4px);
+            background-color: hsl(from var(--sl-color-bg) h s l / 0.7);
+        }
+
+        :global(:root[data-theme="light"]) .sidebar-backdrop {
+            background-color: hsl(from var(--sl-color-bg) h s l / 0.2);
         }
 
         .sidebar-pane {
             visibility: var(--sl-sidebar-visibility, hidden);
             position: fixed;
             z-index: var(--sl-z-index-menu);
-            inset-block: var(--sl-nav-height) 0;
             inset-inline-start: 0;
             width: 100%;
-            background-color: var(--sl-color-bg);
-            height: calc(100vh - var(--sl-nav-height));
+            height: 100svh;
             overflow-y: auto;
+            transform: translateX(-100%);
 
-            &::-webkit-scrollbar {
-                display: none;
-            }
+            scrollbar-width: none;
+
+            transition: all ease-in-out 200ms;
         }
 
         body:has(starlight-menu-button[aria-expanded="true"]) .sidebar-pane {
             --sl-sidebar-visibility: visible;
+            transition: transform ease-in-out 200ms;
+            transform: initial;
+        }
+
+        .sidebar-scroll-area {
+            position: fixed;
+            inset: 0;
+            overflow-y: scroll;
+            scrollbar-width: none;
+            width: fit-content;
+        }
+
+        .sidebar-close-btn {
+            font-size: 1.3rem;
+            outline: none;
+            border: none;
+            background: transparent;
+            position: absolute;
+            color: var(--sl-color-gray-2);
+            right: 1rem;
+            top: 1rem;
+            z-index: 10;
         }
 
         .sidebar-content {
             height: 100%;
+            width: 85dvw;
+            min-width: 19rem;
+            max-width: 22rem;
             min-height: max-content;
+            background-color: var(--sl-color-bg);
             padding: 1rem var(--sl-sidebar-pad-x) 1rem;
             flex-direction: column;
             gap: 1rem;
-
-            @media (min-width: 105rem) {
-                padding-left: 0;
-            }
         }
 
         @media (min-width: 50rem) {
@@ -96,11 +175,24 @@ const { hasSidebar } = Astro.locals.starlightRoute;
         }
 
         @media (min-width: 64rem) {
+            .sidebar-backdrop,
+            .sidebar-close-btn {
+                display: none;
+            }
+
             .main-frame {
                 padding-top: var(--sl-nav-height);
             }
-            :global([data-has-sidebar]) .header {
-                padding-inline-end: var(--sl-nav-pad-x);
+            .sidebar-scroll-area {
+                position: sticky;
+                width: var(--sl-sidebar-width);
+            }
+            .sidebar-content {
+                position: unset;
+                width: 100%;
+                min-width: auto;
+                max-width: none;
+                background-color: transparent;
             }
             .sidebar-pane {
                 position: sticky;
@@ -108,6 +200,15 @@ const { hasSidebar } = Astro.locals.starlightRoute;
                 width: var(--sl-sidebar-width);
                 background-color: transparent;
                 border-inline-end: 1px solid var(--sl-color-hairline-shade);
+                inset-block: var(--sl-nav-height) 0;
+                z-index: 5;
+                height: calc(100vh - var(--sl-nav-height));
+                transform: unset;
+            }
+        }
+        @media (min-width: 105rem) {
+            .sidebar-content {
+                padding-left: 0;
             }
         }
     }
