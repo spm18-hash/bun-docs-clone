@@ -1,11 +1,3 @@
----
-import { getRoute } from "node_modules/@astrojs/starlight/utils/routing/data";
-const route = await getRoute(Astro);
-
-const mainPaneWidth =
-    route.id === "404" ? "100%" : "calc(100% - var(--sl-sidebar-width))";
----
-
 <div class="container">
     {
         Astro.locals.starlightRoute.toc && (
@@ -19,7 +11,7 @@ const mainPaneWidth =
     <div class="main-pane" style><slot /></div>
 </div>
 
-<style define:vars={{ mainPaneWidth }}>
+<style>
     @layer starlight.core {
         .container {
             padding: 1.25rem;
@@ -35,11 +27,15 @@ const mainPaneWidth =
             contain: inline-size;
             flex-grow: 1;
             isolation: isolate;
+            margin-inline: auto;
         }
 
         @media (min-width: 80rem) {
             .container {
                 display: flex;
+            }
+
+            :global([data-has-toc][data-has-sidebar]) .container {
                 padding: 2.5rem 2.5rem 0 5.5rem;
             }
             .right-sidebar-container {
