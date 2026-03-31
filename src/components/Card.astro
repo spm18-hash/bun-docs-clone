@@ -1,7 +1,6 @@
 ---
-import Icons from "./Icons.astro";
-
 import type { StarlightIcon } from "./Icons";
+import Icons from "./Icons.astro";
 
 interface Props {
     icon?: StarlightIcon;
@@ -49,8 +48,6 @@ const { icon, title, href } = Astro.props;
     @layer starlight.components {
         .card {
             position: relative;
-            --sl-card-border: var(--sl-color-purple);
-            --sl-card-bg: var(--sl-color-purple-low);
             border: 1px solid var(--card-border);
             background-color: var(--card-bg);
             padding: 20px 24px;
@@ -62,22 +59,7 @@ const { icon, title, href } = Astro.props;
                 border-color: var(--sl-color-text-accent);
             }
         }
-        .card:nth-child(4n + 1) {
-            --sl-card-border: var(--sl-color-orange);
-            --sl-card-bg: var(--sl-color-orange-low);
-        }
-        .card:nth-child(4n + 3) {
-            --sl-card-border: var(--sl-color-green);
-            --sl-card-bg: var(--sl-color-green-low);
-        }
-        .card:nth-child(4n + 4) {
-            --sl-card-border: var(--sl-color-red);
-            --sl-card-bg: var(--sl-color-red-low);
-        }
-        .card:nth-child(4n + 5) {
-            --sl-card-border: var(--sl-color-blue);
-            --sl-card-bg: var(--sl-color-blue-low);
-        }
+
         .title {
             font-weight: 600;
             font-size: var(--sl-text-base);
