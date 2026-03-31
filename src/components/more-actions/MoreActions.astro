@@ -187,12 +187,6 @@ const { isMobile = false } = Astro.props;
 
         constructor() {
             super();
-
-            this.toggleDropdownList = this.toggleDropdownList.bind(this);
-            this.handleClickOutside = this.handleClickOutside.bind(this);
-            this.handleActionClick = this.handleActionClick.bind(this);
-            this.handleMarkdownRawClick =
-                this.handleMarkdownRawClick.bind(this);
         }
 
         connectedCallback() {
@@ -208,19 +202,11 @@ const { isMobile = false } = Astro.props;
                 this.querySelector<HTMLButtonElement>("#copy-page-button");
 
             if (this.trigger) {
-                this.trigger.addEventListener("click", (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    this.toggleDropdownList();
-                });
+                this.trigger.addEventListener("click", this.handleTriggerClick);
             }
 
-            this.menuItems.forEach((item, index) => {
-                item.addEventListener("pointerup", (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    this.handleActionClick(index);
-                });
+            this.menuItems.forEach((item) => {
+                item.addEventListener("pointerup", this.handleItemPointerUp);
             });
 
             if (this.markdownRawButton) {
@@ -235,18 +221,48 @@ const { isMobile = false } = Astro.props;
         }
 
         disconnectedCallback() {
+            if (this.trigger) {
+                this.trigger.removeEventListener(
+                    "click",
+                    this.handleTriggerClick,
+                );
+            }
+
+            this.menuItems.forEach((item) => {
+                item.removeEventListener("pointerup", this.handleItemPointerUp);
+            });
+
+            if (this.markdownRawButton) {
+                this.markdownRawButton.removeEventListener(
+                    "click",
+                    this.handleMarkdownRawClick,
+                );
+            }
             document.removeEventListener(
                 "pointerdown",
                 this.handleClickOutside,
             );
-            document.removeEventListener("keydown", this.handleMenuKeydown);
-            this.markdownRawButton?.removeEventListener(
-                "click",
-                this.handleMarkdownRawClick,
-            );
+            this.removeEventListener("keydown", this.handleMenuKeydown);
         }
 
-        private handleMenuKeydown(e: KeyboardEvent) {
+        private handleTriggerClick = (e: MouseEvent) => {
+            e.preventDefault();
+            e.stopPropagation();
+            this.toggleDropdownList();
+        };
+
+        private handleItemPointerUp = (e: MouseEvent) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const clickedItem = e.currentTarget as HTMLLIElement;
+            const index = this.menuItems.indexOf(clickedItem);
+
+            if (index !== -1) {
+                this.handleActionClick(index);
+            }
+        };
+        private handleMenuKeydown = (e: KeyboardEvent) => {
             if (e.key === "Escape") {
                 this.closeDropdownList();
                 this.trigger?.focus();
@@ -285,7 +301,7 @@ const { isMobile = false } = Astro.props;
                     this.handleActionClick(currentIndex);
                 }
             }
-        }
+        };
 
         private temporarilyUpdateButtonUI(newHTML: string) {
             if (!this.markdownRawButton) return;
@@ -300,7 +316,7 @@ const { isMobile = false } = Astro.props;
             }, 2000);
         }
 
-        private async handleMarkdownRawClick() {
+        private handleMarkdownRawClick = async () => {
             if (!this.markdownRawButton) return;
 
             const rawUrl = this.getMarkdownRawUrl();
@@ -326,7 +342,7 @@ const { isMobile = false } = Astro.props;
                     `<div class="astro-pb3oosuk"><svg aria-hidden="true" class="astro-pb3oosuk astro-apb64oph" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="--sl-icon-size: 1.2em;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>Failed</div>`,
                 );
             }
-        }
+        };
 
         private closeDropdownList() {
             this.isOpen = false;
@@ -334,11 +350,11 @@ const { isMobile = false } = Astro.props;
             this.dropdownList?.setAttribute("data-state", "closed");
         }
 
-        private handleClickOutside(event: PointerEvent) {
+        private handleClickOutside = (event: PointerEvent) => {
             if (this.isOpen && !this.contains(event.target as Node)) {
                 this.closeDropdownList();
             }
-        }
+        };
 
         private toggleDropdownList() {
             if (this.isOpen) {
