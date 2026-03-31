@@ -54,10 +54,5 @@ const main = Astro.site;
         width: auto;
         height: var(--display-height);
         margin-block: calc((var(--sl-nav-height)-var(--display-height)) / 2);
-        transition: transform 0.18s cubic-bezier(0.75, 0.82, 0.165, 1);
-    }
-    .site-title a:hover :global(svg) {
-        --hover-offset: 0.15rem;
-        transform: translateY(calc(var(--hover-offset) * -1));
     }
 </style>
