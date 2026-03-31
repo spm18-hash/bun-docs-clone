@@ -72,6 +72,7 @@ const { parent, current } = getActiveBreadcrumb(sidebar, currentPage);
 
 <style>
     .breadcrumb-container {
+        display: flex;
         @media (min-width: 64rem) {
             display: none;
         }
@@ -83,8 +84,8 @@ const { parent, current } = getActiveBreadcrumb(sidebar, currentPage);
             display: inline-flex;
             align-items: center;
             gap: 0.35rem;
-            font-size: 14px;
-            line-height: 20px;
+            font-size: var(--sl-text-sm);
+            line-height: 24px;
 
             & li {
                 list-style-type: none;
