@@ -5,6 +5,8 @@ import SidebarPersister from "@astrojs/starlight/components/SidebarPersister.ast
 import SidebarSublist from "@/components/starlight/SidebarSublist.astro";
 import TabPanel from "../tabs/TabPanel.astro";
 import Select from "../tabs/Select.astro";
+import SiteTitle from "@/components/starlight/SiteTitle.astro";
+
 const { sidebar } = Astro.locals.starlightRoute;
 
 type SidebarEntry = StarlightRouteData["sidebar"][number];
@@ -33,6 +35,9 @@ const isCurrent = (sidebar: SidebarEntry[]): boolean =>
 ---
 
 <SidebarPersister>
+    <div class="sidebar-mobile-top">
+        <SiteTitle displayHeight="1.65rem" />
+    </div>
     <Select />
     <div id="panels">
         {
@@ -44,3 +49,14 @@ const isCurrent = (sidebar: SidebarEntry[]): boolean =>
         }
     </div>
 </SidebarPersister>
+
+<style>
+    .sidebar-mobile-top {
+        margin-top: 0.5rem;
+    }
+    @media (min-width: 64rem) {
+        .sidebar-mobile-top {
+            display: none;
+        }
+    }
+</style>

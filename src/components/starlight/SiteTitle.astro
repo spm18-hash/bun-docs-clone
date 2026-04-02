@@ -3,6 +3,12 @@ import logo from "@/assets/logo-with-wordmark-light.svg?raw";
 import logoDark from "@/assets/logo-with-wordmark-dark.svg?raw";
 
 const main = Astro.site;
+
+type Props = {
+    displayHeight?: string;
+};
+
+const { displayHeight = "1.5rem" } = Astro.props;
 ---
 
 <span class="site-title sl-flex">
@@ -20,7 +26,7 @@ const main = Astro.site;
     />
 </span>
 
-<style>
+<style define:vars={{ displayHeight }}>
     .site-title {
         gap: 1rem;
     }
@@ -50,9 +56,8 @@ const main = Astro.site;
         border-radius: 1px;
     }
     .site-title :global(svg) {
-        --display-height: 1.5rem;
         width: auto;
-        height: var(--display-height);
+        height: var(--displayHeight);
         margin-block: calc((var(--sl-nav-height)-var(--display-height)) / 2);
     }
 </style>
