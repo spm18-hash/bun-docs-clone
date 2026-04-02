@@ -20,7 +20,7 @@ import Icons from "@/components/Icons.astro";
 </starlight-menu-button>
 
 <script>
-    import { isSidebarOpen } from "@/stores/sidebar-store";
+    import { isSidebarOpen, sidebar } from "@/stores/sidebar-store";
 
     class StarlightMenuButton extends HTMLElement {
         btn = this.querySelector("button")!;
@@ -29,9 +29,7 @@ import Icons from "@/components/Icons.astro";
         constructor() {
             super();
 
-            this.btn.addEventListener("click", () =>
-                isSidebarOpen.set(!isSidebarOpen.get()),
-            );
+            this.btn.addEventListener("click", sidebar.toggle);
 
             this.unsubscribe = isSidebarOpen.subscribe((expanded) => {
                 this.setAttribute("aria-expanded", String(expanded));

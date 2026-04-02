@@ -32,7 +32,7 @@ import Icon from "@/components/Icons.astro";
 </div>
 
 <script>
-    import { isSidebarOpen } from "@/stores/sidebar-store";
+    import { isSidebarOpen, sidebar } from "@/stores/sidebar-store";
 
     const closeButton = document.getElementById("sidebar-close-button");
     const sidebarBackdrop = document.getElementById("sidebar-backdrop");
@@ -42,9 +42,7 @@ import Icon from "@/components/Icons.astro";
     );
 
     elements.forEach((element) => {
-        element.addEventListener("click", () => {
-            isSidebarOpen.set(false);
-        });
+        element.addEventListener("click", sidebar.close);
     });
 </script>
 
