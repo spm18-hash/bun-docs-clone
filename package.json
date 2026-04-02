@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@astrojs/starlight": "0.38.1",
+    "@pagefind/default-ui": "^1.4.0",
     "@resvg/resvg-js": "^2.6.2",
     "astro": "6.0.4",
+    "nanostores": "^1.2.0",
     "satori": "^0.25.0",
     "satori-html": "^0.3.2",
     "sharp": "^0.34.2"
