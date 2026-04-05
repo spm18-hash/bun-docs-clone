@@ -6,9 +6,9 @@ const env = globalThis.process?.env || {};
 
 export const SITE_URL =
   env.CF_PAGES === "1"
-    ? env.CF_PAGES_BRANCH === "main"
-      ? "https://bun-docs-clone.pages.dev" // Production URL
-      : env.CF_PAGES_URL // Unique Preview URL
-    : "http://localhost:4321";
+    ? (env.CF_PAGES_URL ?? "https://bun-docs-clone.pages.dev") // Production URL
+    : env.VERCEL === "1"
+      ? `https://${env.VERCEL_URL ?? env.VERCEL_BRANCH_URL}`
+      : "http://localhost:4321";
 
 export const SITE_TITLE = "Bun";
