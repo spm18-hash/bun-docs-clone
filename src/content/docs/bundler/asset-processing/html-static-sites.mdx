@@ -3,12 +3,11 @@ title: HTML & Static Sites
 description: Build static sites, landing pages, and web applications with Bun's bundler
 ---
 
-import { Tabs, TabItem } from "@astrojs/starlight/components";
 import Aside from "@/components/Aside.astro";
 
 Bun's bundler has first-class support for HTML. Build static sites, landing pages, and web applications with zero configuration. Just point Bun at your HTML file and it handles everything else.
 
-```html title="index.html"
+```html index.html
 <!doctype html>
 <html>
   <head>
@@ -62,7 +61,7 @@ Press h + Enter to show shortcuts
 
 Your React or other SPA will work out of the box — no configuration needed. All routes like `/about`, `/users/123`, etc. will serve the same HTML file, letting your client-side router handle the navigation.
 
-```html title="index.html"
+```html index.html
 <!doctype html>
 <html>
   <head>
@@ -157,32 +156,27 @@ It's also a CSS bundler. You can use `@import` in your CSS files to import other
 
 For example:
 
-<Tabs>
+:::code-group
 
-<TabItem label="styles.css">
-```css title="styles.css" 
+```css styles.css
 @import "./abc.css";
 
 .container {
-background-color: blue;
+  background-color: blue;
 }
+```
 
-````
-</TabItem>
-
-<TabItem label="abc.css">
-```css title="abc.css"
+```css abc.css
 body {
   background-color: red;
 }
-````
+```
 
-</TabItem>
-</Tabs>
+:::
 
 This outputs:
 
-```css title="styles.css"
+```css styles.css
 body {
   background-color: red;
 }
@@ -196,7 +190,7 @@ body {
 
 You can reference local assets in your CSS files.
 
-```css title="styles.css"
+```css styles.css
 body {
   background-image: url("./logo.png");
 }
@@ -204,7 +198,7 @@ body {
 
 This will copy `./logo.png` to the output directory and rewrite the path in the CSS file to include a content hash.
 
-```css title="styles.css"
+```css styles.css
 body {
   background-image: url("./logo-[ABC123].png");
 }
@@ -214,7 +208,7 @@ body {
 
 To associate a CSS file with a JavaScript file, you can import it in your JavaScript file.
 
-```ts title="app.ts"
+```ts app.ts
 import "./styles.css";
 import "./more-styles.css";
 ```
@@ -236,37 +230,29 @@ bun install --dev bun-plugin-tailwind
 
 Then, add the plugin to your `bunfig.toml`:
 
-```toml title="bunfig.toml"
+```toml bunfig.toml
 [serve.static]
 plugins = ["bun-plugin-tailwind"]
 ```
 
 Then, reference TailwindCSS in your HTML via `<link>` tag, `@import` in CSS, or import in JavaScript.
 
-<Tabs>
-  <TabItem label="index.html">
+:::code-group
 
-    ```html title="index.html" icon="file-code"
-    <!-- Reference TailwindCSS in your HTML -->
-    <link rel="stylesheet" href="tailwindcss" />
-    ```
+```html index.html
+<!-- Reference TailwindCSS in your HTML -->
+<link rel="stylesheet" href="tailwindcss" />
+```
 
-  </TabItem> 
-  <TabItem label="styles.css">
+```css styles.css
+@import "tailwindcss";
+```
 
-    ```css title="styles.css" icon="file-code"
-    @import "tailwindcss";
-    ```
+```ts app.ts
+import "tailwindcss";
+```
 
-  </TabItem> 
-  <TabItem label="app.ts">
-
-    ```ts title="app.ts"
-    import "tailwindcss";
-    ```
-
-  </TabItem> 
-</Tabs>
+:::
 
 <Aside>Only one of those are necessary, not all three.</Aside>
 
@@ -278,7 +264,7 @@ Bun can replace `process.env.*` references in your JavaScript and TypeScript wit
 
 To inline environment variables when using `bun ./index.html`, configure the `env` option in your `bunfig.toml`:
 
-```toml title="bunfig.toml"
+```toml bunfig.toml
 [serve.static]
 env = "PUBLIC_*"  # only inline env vars starting with PUBLIC_ (recommended)
 # env = "inline"  # inline all environment variables
@@ -304,42 +290,39 @@ PUBLIC_API_URL=https://api.example.com bun ./index.html
 
 When building static HTML for production, use the `env` option to inline environment variables:
 
-<Tabs>
-  <TabItem label="CLI">
-    ```bash 
-    # Inline all environment variables
-    bun build ./index.html --outdir=dist --env=inline
+:::code-group
 
-    # Only inline env vars with a specific prefix (recommended)
-    bun build ./index.html --outdir=dist --env=PUBLIC_*
-    ```
+```bash
+# Inline all environment variables
+bun build ./index.html --outdir=dist --env=inline
 
-  </TabItem> 
-  <TabItem label="API">
-    ```ts title="build.ts" 
-    // Inline all environment variables
-    await Bun.build({
-      entrypoints: ["./index.html"],
-      outdir: "./dist",
-      env: "inline", // [!code highlight]
-    });
+# Only inline env vars with a specific prefix (recommended)
+bun build ./index.html --outdir=dist --env=PUBLIC_*
+```
 
-    // Only inline env vars with a specific prefix (recommended)
-    await Bun.build({
-      entrypoints: ["./index.html"],
-      outdir: "./dist",
-      env: "PUBLIC_*", // [!code highlight]
-    });
-    ```
+```ts build.ts
+// Inline all environment variables
+await Bun.build({
+  entrypoints: ["./index.html"],
+  outdir: "./dist",
+  env: "inline", // [!code highlight]
+});
 
-  </TabItem> 
-</Tabs>
+// Only inline env vars with a specific prefix (recommended)
+await Bun.build({
+  entrypoints: ["./index.html"],
+  outdir: "./dist",
+  env: "PUBLIC_*", // [!code highlight]
+});
+```
+
+:::
 
 ### Example
 
 Given this source file:
 
-```ts title="app.ts"
+```ts app.ts
 const apiUrl = process.env.PUBLIC_API_URL;
 console.log(`API URL: ${apiUrl}`);
 ```
@@ -352,7 +335,7 @@ PUBLIC_API_URL=https://api.example.com bun build ./index.html --outdir=dist --en
 
 The bundled output will contain:
 
-```js title="dist/app.js"
+```js dist/app.js
 const apiUrl = "https://api.example.com";
 console.log(`API URL: ${apiUrl}`);
 ```
@@ -394,22 +377,21 @@ While the server is running:
 
 When you're ready to deploy, use `bun build` to create optimized production bundles:
 
-<Tabs>
-  <TabItem label="CLI">
-    ```bash 
-    bun build ./index.html --minify --outdir=dist
-    ```
-  </TabItem> 
-  <TabItem label="API">
-    ```ts title="build.ts" 
-    await Bun.build({
-      entrypoints: ["./index.html"],
-      outdir: "./dist",
-      minify: true,
-    });
-    ```
-  </TabItem> 
-</Tabs>
+:::code-group
+
+```bash
+bun build ./index.html --minify --outdir=dist
+```
+
+```ts build.ts
+await Bun.build({
+  entrypoints: ["./index.html"],
+  outdir: "./dist",
+  minify: true,
+});
+```
+
+:::
 
 <Aside>
   Currently, plugins are only supported through `Bun.build`'s API or through
@@ -427,7 +409,7 @@ You can run `bun build --watch` to watch for changes and rebuild automatically. 
 
 Need more control? Configure the bundler through the JavaScript API and use Bun's builtin `HTMLRewriter` to preprocess HTML.
 
-```ts title="build.ts"
+```ts build.ts
 await Bun.build({
   entrypoints: ["./index.html"],
   outdir: "./dist",

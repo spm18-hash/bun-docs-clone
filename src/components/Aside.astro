@@ -59,27 +59,23 @@ if (icon && !Icons[icon]) throwInvalidAsideIconError(icon);
         }
         .aside--note {
             --sl-color-asides-text-accent: var(--sl-color-blue-high);
-            --sl-color-asides-border: hsl(from var(--sl-color-blue) h 70% 60%);
-            background-color: hsl(from var(--sl-color-blue-low) h s 12%);
+            --sl-color-asides-border: var(--sl-color-blue);
+            background-color: var(--sl-color-blue-low);
         }
         .aside--tip {
             --sl-color-asides-text-accent: var(--sl-color-purple-high);
-            --sl-color-asides-border: hsl(
-                from var(--sl-color-purple) h 70% 60%
-            );
-            background-color: hsl(from var(--sl-color-purple-low) h s 12%);
+            --sl-color-asides-border: var(--sl-color-purple);
+            background-color: var(--sl-color-purple-low);
         }
         .aside--caution {
             --sl-color-asides-text-accent: var(--sl-color-orange-high);
-            --sl-color-asides-border: hsl(
-                from var(--sl-color-orange) h 70% 60%
-            );
-            background-color: hsl(from var(--sl-color-orange-low) h s 12%);
+            --sl-color-asides-border: var(--sl-color-orange);
+            background-color: var(--sl-color-orange-low);
         }
         .aside--danger {
             --sl-color-asides-text-accent: var(--sl-color-red-high);
-            --sl-color-asides-border: hsl(from var(--sl-color-red) h 70% 60%);
-            background-color: hsl(from var(--sl-color-red-low) h s 12%);
+            --sl-color-asides-border: var(--sl-color-red);
+            background-color: var(--sl-color-red-low);
         }
 
         .aside__icon {
