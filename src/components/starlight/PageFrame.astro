@@ -182,6 +182,7 @@ import Icon from "@/components/Icons.astro";
                 border-inline-end: 1px solid var(--sl-color-hairline-shade);
                 z-index: 5;
                 inset-block-start: var(--sl-nav-height);
+                height: calc(100svh - var(--sl-nav-height));
             }
 
             .sidebar-content {
@@ -191,6 +192,7 @@ import Icon from "@/components/Icons.astro";
                 max-width: none;
                 background-color: transparent;
                 transform: unset;
+                height: calc(100svh - var(--sl-nav-height));
             }
         }
 

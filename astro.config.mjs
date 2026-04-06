@@ -3,6 +3,10 @@ import { SITE_URL } from "./src/const";
 import starlight from "@astrojs/starlight";
 import { defineConfig, fontProviders } from "astro/config";
 import { sidebar } from "./astro.sidebar";
+import { rehypePlugin } from "./src/rehypePlugin";
+import { remarkPlugin } from "./src/remarkPlugin";
+import remarkDirective from "remark-directive";
+import nord from "./src/scripts/code-tab.mjs?raw";
 
 export default defineConfig({
   site: SITE_URL,
@@ -11,7 +15,7 @@ export default defineConfig({
       provider: fontProviders.google(),
       name: "Geist",
       cssVariable: "--font-geist",
-      weights: [400, 600],
+      weights: [400, 500, 600],
     },
     {
       provider: fontProviders.google(),
@@ -51,8 +55,10 @@ export default defineConfig({
         themes: ["dracula", "github-light-default"],
         styleOverrides: {
           codeFontSize: "0.9em",
+          borderRadius: ".75rem",
+
           frames: {
-            terminalTitlebarBackground: "red",
+            frameBoxShadowCssValue: "none",
             inlineButtonBackgroundHoverOrFocusOpacity: "0.05",
           },
         },
@@ -74,5 +80,17 @@ export default defineConfig({
       },
       routeMiddleware: "./src/routeData.ts",
     }),
+    {
+      name: "injecting-script",
+      hooks: {
+        "astro:config:setup": ({ injectScript }) => {
+          injectScript("page", nord);
+        },
+      },
+    },
   ],
+  markdown: {
+    remarkPlugins: [remarkDirective, remarkPlugin],
+    rehypePlugins: [rehypePlugin],
+  },
 });

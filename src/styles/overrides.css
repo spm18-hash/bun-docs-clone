@@ -1,32 +1,92 @@
 @layer overrides {
-    .expressive-code [data-language="txt"] + .copy {
+    .code-group-container {
+        display: block;
+        border: 1px solid var(--sl-color-gray-6);
+        border-radius: 0.875rem;
+        overflow: hidden;
+        background-color: hsl(from var(--sl-color-gray-5) h s l / 0.2);
+    }
+    .nord-tab-header {
+        display: flex;
+        gap: 1.125rem;
+        overflow: auto;
+        padding-inline: 0.90625rem;
+
+        & .nord-tab {
+            align-items: center;
+            cursor: default;
+            flex-shrink: 0;
+            width: fit-content;
+            gap: 0.375rem;
+            padding: 0.575rem 0;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--sl-color-gray-3);
+            border-bottom: 1px solid transparent;
+
+            &[aria-selected="true"] {
+                color: var(--sl-color-white);
+                border-bottom-color: var(--sl-color-red);
+            }
+
+            &:not([aria-selected="true"]):hover {
+                color: var(--sl-color-white);
+                border-bottom-color: var(--sl-color-gray-5);
+            }
+        }
+
+        & * {
+            margin-top: 0;
+        }
+    }
+    .nord-tab-content {
+        margin-top: 0.875rem;
+        padding: 0 0.1rem 0.1rem;
+    }
+    .nord-tab-panel pre {
+        border: none;
+    }
+    .expressive-code
+        :where([data-language="txt"], [data-language="plaintext"])
+        + .copy {
         display: none;
     }
-    .expressive-code .frame {
+
+    .nord-tab-panel .expressive-code .frame.is-terminal {
+        --button-spacing: 0.4rem;
+
+        & .header {
+            display: none;
+        }
+    }
+    /*.expressive-code .frame {
         border-radius: 12px;
         padding: 2px;
         background-color: var(--sl-color-bg);
         border: 1px solid var(--sl-color-gray-5);
-    }
+    }*/
 
-    .expressive-code pre {
+    /*.expressive-code pre {
         border: none;
         border-radius: 10px;
-    }
+    }*/
 
-    .expressive-code .frame .header {
+    /*.expressive-code .frame .header {
         border-radius: 10px 10px 0 0;
         overflow: clip;
         background: var(--sl-color-bg);
-    }
+    }*/
 
-    .expressive-code:has(.header:not(:empty)) pre {
+    /*.expressive-code:has(.header:not(:empty)) pre {
         border-radius: 0 0 10px 10px;
-    }
+    }*/
 
-    .expressive-code pre > code {
-        overflow: auto;
+    .nord-tab-panel .expressive-code:has(.header:not(:empty)) pre {
+        border-radius: calc(var(--ec-brdRad) + var(--ec-brdWd));
     }
+    /*.expressive-code pre > code {
+        overflow: auto;
+    }*/
 
     .expressive-code .copy button {
         border-radius: 0.35rem;
@@ -37,46 +97,61 @@
             margin: 0.43rem;
         }
     }
-
+    [data-theme="light"]
+        .nord-tab-panel
+        .expressive-code
+        .frame.is-terminal
+        pre {
+        background-color: white;
+    }
     .expressive-code .frame.has-title:not(.is-terminal) .title {
-        background: var(--sl-color-bg);
-        background-clip: padding-box;
+        background: transparent;
     }
 
-    .expressive-code .frame.has-title:not(.is-terminal) .header::before {
+    /*.expressive-code .frame.has-title:not(.is-terminal) .header::before {
         border: none;
-    }
+    }*/
 
-    .expressive-code .frame.is-terminal .header {
+    /*.expressive-code .frame.is-terminal .header {
         border: none;
 
         &::after {
             border: none;
         }
-    }
+    }*/
 
     .expressive-code .frame.has-title:not(.is-terminal) .title::after {
         border-top: none;
         border-bottom: 1px solid var(--sl-color-red);
     }
-    .expressive-code:has([data-language="txt"]) {
+    .expressive-code:has(
+        :where([data-language="txt"], [data-language="plaintext"])
+    ) {
         margin-top: 0;
 
         & figure {
             border-top: none;
             border-radius: 0 0 12px 12px;
+
+            & pre {
+                border-top: none;
+            }
         }
     }
-    .expressive-code:has(+ .expressive-code [data-language="txt"]) {
+    .expressive-code:has(
+        + .expressive-code
+            :where([data-language="txt"], [data-language="plaintext"])
+    ) {
         & figure {
             border-radius: 12px 12px 0 0;
 
-            pre {
+            & pre {
                 border-radius: 0;
             }
         }
     }
-    .expressive-code [data-language="txt"] {
+    .expressive-code
+        :where([data-language="txt"], [data-language="plaintext"]) {
         border-radius: 0 0 10px 10px;
     }
 
