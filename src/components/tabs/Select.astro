@@ -85,7 +85,7 @@ const makeId = (label: string) =>
             cursor: pointer;
 
             &:hover {
-                color: var(--sl-color-red);
+                color: var(--color-brand);
             }
 
             & a {
@@ -95,10 +95,10 @@ const makeId = (label: string) =>
                 text-decoration: none;
 
                 &[aria-selected="true"] {
-                    color: var(--sl-color-red);
+                    color: var(--color-brand);
                     & + svg {
                         display: flex;
-                        color: var(--sl-color-red);
+                        color: var(--color-brand);
                     }
                 }
             }

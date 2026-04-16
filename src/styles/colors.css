@@ -7,11 +7,28 @@
         --sl-font: var(--font-geist);
         --sl-font-mono: var(--font-geist-mono);
         --sl-content-gap-y: 1.5rem;
-        --sl-color-red: hsl(337 100% 45%);
         --sl-z-index-menu: 20;
-        --sl-color-text-accent: var(--sl-color-red);
+
+        --color-brand: hsl(337 100% 45%);
+        --sl-color-text-accent: var(--color-brand);
 
         --sl-color-text: hsl(from var(--sl-color-gray-2) h s 45%);
+
+        --sl-color-blue-high: hsl(226 70.7% 40.2%); /* text color */
+        --sl-color-blue: hsl(213 96.9% 87.3%); /* border color */
+        --sl-color-blue-low: hsl(214 100% 96.9%); /* background color */
+
+        --sl-color-purple-high: hsl(); /* text color */
+        --sl-color-purple: hsl(273 96.9% 87.3%); /* border color */
+        --sl-color-purple-low: hsl(274 100% 96.9%); /* background color */
+
+        --sl-color-orange-high: hsl(32 81% 28.8%); /* text color */
+        --sl-color-orange: hsl(53 98.3% 76.9%); /* border color */
+        --sl-color-orange-low: hsl(55 91.7% 95.3%); /* background color */
+
+        /*--sl-color-red-high: hsl(); /* text color */
+        /*--sl-color-red: hsl(337 100% 45%); /* border color */
+        /*--sl-color-red-low: hsl(338 100% 96.9%); /* background color */
 
         --card-bg: hsl(from var(--sl-color-black) h s l / 0.5);
         --card-border: hsl(from var(--sl-color-gray-5) h s 90%);
@@ -32,11 +49,27 @@
         --sl-color-bg-sidebar: var(--sl-color-bg);
         --sl-color-hairline-shade: hsl(224 10% 15%);
         --sl-color-text: hsl(from var(--sl-color-gray-2) h s 65%);
-        --sl-color-red: hsl(337 100% 72.5%);
+        --color-brand: hsl(337 100% 72.5%);
 
         --card-bg: hsl(from var(--sl-color-black) h s 10% / 0.5);
         --card-border: hsl(from var(--sl-color-gray-5) h s 15%);
         --card-bg-hover: hsl(from var(--card-bg) h s 15%);
+
+        --sl-color-blue-high: hsl(212 96.4% 78.4%);
+        --sl-color-blue: hsl(224 64.3% 32.9%);
+        --sl-color-blue-low: hsl(221 83.2% 53.3% / 0.2);
+
+        --sl-color-purple-high: hsl();
+        --sl-color-purple: hsl(273 96.9% 87.3%);
+        --sl-color-purple-low: hsl(274 100% 96.9%);
+
+        --sl-color-orange-high: hsl(50 97.8% 63.5%);
+        --sl-color-orange: hsl(28 72.5% 25.7%);
+        --sl-color-orange-low: hsla(41 96.1% 40.4% / 0.2);
+
+        /*--sl-color-red-high: hsl();
+        --sl-color-red: hsl(337 100% 45%);
+        --sl-color-red-low: hsl(338 100% 96.9%);*/
 
         .sl-markdown-content code:not(:where(.not-content *)) {
             background-color: hsl(from white h s l / 0.05);
