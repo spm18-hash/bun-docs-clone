@@ -26,7 +26,7 @@
 
             &[aria-selected="true"] {
                 color: var(--sl-color-white);
-                border-bottom-color: var(--sl-color-red);
+                border-bottom-color: var(--color-brand);
             }
 
             &:not([aria-selected="true"]):hover {
@@ -41,7 +41,7 @@
     }
     .nord-tab-content {
         margin-top: 0.875rem;
-        padding: 0 0.1rem 0.1rem;
+        padding: 0 0.1rem 0.15rem;
     }
     .nord-tab-panel pre {
         border: none;
@@ -122,7 +122,7 @@
 
     .expressive-code .frame.has-title:not(.is-terminal) .title::after {
         border-top: none;
-        border-bottom: 1px solid var(--sl-color-red);
+        border-bottom: 1px solid var(--color-brand);
     }
     .expressive-code:has(
         :where([data-language="txt"], [data-language="plaintext"])
@@ -178,7 +178,7 @@
     .sl-markdown-content a:not(:where(.not-content *, .sl-anchor-link)) {
         font-weight: 600;
         color: var(--sl-color-white);
-        text-decoration: underline var(--sl-color-red);
+        text-decoration: underline var(--color-brand);
         text-underline-offset: 0.25rem;
     }
     .sl-markdown-content a:hover:not(:where(.not-content *)) {
